@@ -1,0 +1,27 @@
+
+.settingsPage {
+  position: relative;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+}
+
+.settingItem {
+  padding: 10px;
+  background: var(--bs-dark);
+  color: white;
+  width: 100%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.selectedImage {
+  width: 300px;
+  height: 200px;
+  object-fit: contain;
+}

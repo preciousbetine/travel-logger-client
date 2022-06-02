@@ -1,0 +1,25 @@
+
+.profilePage {
+  position: relative;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  overflow-y: auto;
+}
+
+.profileDiv {
+  padding: 20px 30px;
+  border-bottom: 2px solid var(--bs-dark);
+}
+
+.userImage {
+  height: 150px;
+  width: 120px;
+  border-radius: 20px;
+  border: 1px solid var(--bs-dark);
+  object-fit: cover;
+}
+
+.numFollow, .infoDisplay {
+  font-weight: 400;
+  font-size: 16px;
+}
