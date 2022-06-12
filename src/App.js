@@ -8,8 +8,8 @@ import {
 import { useSelector } from 'react-redux';
 import { isUserLoggedIn } from './redux/loginSlice';
 import './App.css';
-import Login from './pages/login';
-import Dashboard from './pages/dashboard';
+import Login from './pages/login/login';
+import Dashboard from './pages/dashboard/dashboard';
 
 function App() {
   const loggedInUser = useSelector(isUserLoggedIn);

@@ -13,8 +13,12 @@ export const checkLoggedInState = createAsyncThunk(
       credentials: 'include',
     }).then((res) => res.json()).then((res) => {
       // User is either signed in with google token or our login token
-      console.log('User signed in with login token', res);
-      loggedIn = true;
+      if (res.error) {
+        console.log(res.error);
+      } else {
+        console.log('User signed in with login token', res);
+        loggedIn = true;
+      }
     }).catch((err) => {
       console.log('User not logged in via token', err);
     });

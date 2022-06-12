@@ -9,7 +9,7 @@ export const fetchUserData = createAsyncThunk(
     let userData = null;
     await fetch('http://localhost:5000/myFullInfo', {
       credentials: 'include',
-    }).then((res) => res.json()).then((res) => {
+    }).then((res) => res.json()).then(async (res) => {
       userData = res;
     }).catch((err) => {
       console.log('An Error Occured', err);

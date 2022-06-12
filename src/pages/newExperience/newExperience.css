@@ -1,0 +1,36 @@
+
+.newExperience {
+  position: relative;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  overflow-y: auto;
+  padding: 20px;
+  user-select: none;
+}
+
+.locationInput, .locationInput:focus {
+  outline: none;
+  border: none;
+}
+
+.font-15 {
+  font-size: 15px;
+}
+.font-30 {
+  font-size: 30px;
+}
+
+li {
+  display: inline;
+}
+
+.postImage {
+  width: 40%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.imageHolder {
+  padding: 0px;
+}

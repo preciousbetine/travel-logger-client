@@ -59,12 +59,12 @@ export function EditProfile(props) {
   const [newUserWebsite, setNewUserWebsite] = useState('');
   const [newUserBio, setNewUserBio] = useState('');
   const [imageInfo, setImageInfo] = useState('Max File Size is 3MB');
-  const [profilePicSrc, setProfilePicSrc] = useState('https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+  const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
 
   const nav = (
     <>
       <Link to="/settings" className="text-dark me-1 text-decoration-none">Settings</Link>
-      <span>/</span>
+      <span className="text-dark">/</span>
       <Link to="/settings/editProfile" className="text-dark ms-1">Edit Profile</Link>
     </>
   );
@@ -73,7 +73,6 @@ export function EditProfile(props) {
     setNewUserLocation(user.location);
     setNewUserWebsite(user.website);
     setNewUserBio(user.description);
-    if (user.picture) setProfilePicSrc(user.picture);
     setHeader(nav);
     dispatch(setNewUser(false));
   }, []);
@@ -88,6 +87,7 @@ export function EditProfile(props) {
       profilePicSrc,
       email: user.email,
     };
+    if (profilePicSrc === `http://localhost:5000/photo/${user.picture}`) newProfileInfo.profilePicSrc = null;
     fetch('http://localhost:5000/updateUserInfo', {
       method: 'POST',
       credentials: 'include',
@@ -107,27 +107,33 @@ export function EditProfile(props) {
     });
   };
 
-  const fileSelected = (e) => {
-    const { files } = e.target;
-
-    if (FileReader && files && files.length) {
-      const fr = new FileReader();
-      fr.onload = () => {
-        if ((files[0].size / 1024) < 3072) {
-          setProfilePicSrc(fr.result);
-          setImageInfo('Image Upload Successful');
-        } else {
-          setImageInfo('Maximum File Size Exceeded');
-          setProfilePicSrc(user.picture || 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
-          document.getElementById('profilePic').value = null;
-        }
-      };
-      fr.readAsDataURL(files[0]);
-    } else {
-      setImageInfo('Max File Size is 3MB');
-      setProfilePicSrc(user.picture || 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
-    }
+  const selectImage = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = () => {
+      const file = input.files[0];
+      if (FileReader && file) {
+        const fr = new FileReader();
+        fr.onload = () => {
+          if ((file.size / 1024) < 3072) {
+            setProfilePicSrc(fr.result);
+            setImageInfo('Image Upload Successful');
+          } else {
+            setImageInfo('Maximum File Size Exceeded');
+            setProfilePicSrc(user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+            document.getElementById('profilePic').value = null;
+          }
+        };
+        fr.readAsDataURL(file);
+      } else {
+        setImageInfo('Max File Size is 3MB');
+        setProfilePicSrc(user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+      }
+    };
+    input.click();
   };
+
   const handleInputChange = (e) => {
     switch (e.target.id) {
       case 'newUserName': {
@@ -152,29 +158,39 @@ export function EditProfile(props) {
   return (
     <div className="settingsPage">
       <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
-        <label htmlFor="profilePic" className="w-100 fw-bold">
+        <label htmlFor="profilePic" className="text-dark w-100">
           Profile Picture
-          <input type="file" className="form-control mt-2" id="profilePic" accept="image/*" onChange={fileSelected} />
+          <div>
+            <button
+              onClick={() => { selectImage(); }}
+              className="btn btn-dark border-dark d-flex justify-content-center align-items-center mt-1"
+              type="button"
+            >
+              <i className="fa-solid fa-image font-30 me-2" />
+              Choose Picture
+            </button>
+          </div>
           <small id="emailHelp" className="form-text text-muted d-block">{imageInfo}</small>
           <img
             alt=""
             src={profilePicSrc}
+            id="profilePic"
             className="selectedImage mt-2"
           />
         </label>
-        <label htmlFor="newUserName" className="w-100 mt-3 fw-bold">
+        <label htmlFor="newUserName" className="text-dark w-100 mt-3">
           Display Name
           <input type="text" className="form-control mt-2" id="newUserName" value={newUserName} onChange={handleInputChange} />
         </label>
-        <label htmlFor="newUserLocation" className="w-100 mt-3 fw-bold">
+        <label htmlFor="newUserLocation" className="text-dark w-100 mt-3">
           Current Location
           <input type="text" className="form-control mt-2" id="newUserLocation" value={newUserLocation} onChange={handleInputChange} />
         </label>
-        <label htmlFor="newUserWebsite" className="w-100 mt-3 fw-bold">
+        <label htmlFor="newUserWebsite" className="text-dark w-100 mt-3">
           Website
           <input type="text" className="form-control mt-2" id="newUserWebsite" value={newUserWebsite} onChange={handleInputChange} />
         </label>
-        <label htmlFor="newUserBio" className="w-100 mt-3 fw-bold">
+        <label htmlFor="newUserBio" className="text-dark w-100 mt-3">
           Bio [Length : 200 Characters Max]
           <textarea
             type="text"
@@ -191,7 +207,7 @@ export function EditProfile(props) {
           <LinkContainer to="/settings">
             <button type="button" className="btn btn-link text-dark px-4">Discard</button>
           </LinkContainer>
-          <button type="submit" className="btn btn-dark px-4">Save</button>
+          <button type="submit" className="btn btn-dark border border-dark px-4">Save</button>
         </div>
       </form>
     </div>

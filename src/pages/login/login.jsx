@@ -86,14 +86,14 @@ function LoginPage(props) {
             </div>
             <ButtonGroup className="mb-3">
               <Button
-                variant="link text-secondary"
+                variant="link text-dark"
                 onClick={() => {
                   setLoginOrSignUp(!loginOrSignUp);
                 }}
               >
                 Sign Up
               </Button>
-              <Button type="submit" className="btn btn-secondary px-4">Login</Button>
+              <Button type="submit" className="btn btn-dark px-4">Login</Button>
             </ButtonGroup>
             <br />
           </form>
@@ -114,14 +114,14 @@ function LoginPage(props) {
             </div>
             <ButtonGroup className="mb-3">
               <Button
-                variant="link text-secondary"
+                variant="link text-dark"
                 onClick={() => {
                   setLoginOrSignUp(!loginOrSignUp);
                 }}
               >
                 Log In
               </Button>
-              <Button type="submit" className="btn btn-secondary px-4">Sign Up</Button>
+              <Button type="submit" className="btn btn-dark px-4">Sign Up</Button>
             </ButtonGroup>
             <br />
           </form>

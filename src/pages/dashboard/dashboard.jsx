@@ -8,9 +8,9 @@ import {
 import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
 import { isNewUser } from '../../redux/loginSlice';
-import Notifications from '../notifications/notifications';
 import Search from '../search/search';
 import Profile from '../profile/profile';
+import NewExperience from '../newExperience/newExperience';
 import AllSettings, { EditProfile } from '../settings/settings';
 import './dashboard.css';
 
@@ -19,38 +19,31 @@ function SideBar() {
   return (
     <div className="sideBar p-2">
       <div className="top-section d-flex flex-column">
-        <LinkContainer to="/notifications">
-          <button
-            title="Notifications"
-            type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/notifications' ? 'bg-dark text-white' : ''}`}
-          >
-            <i className="fa-solid fa-bell font-30" />
-          </button>
-        </LinkContainer>
         <LinkContainer to="/search">
           <button
-            title="Messages"
+            title="Find other travellers"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/search' ? 'bg-dark text-white' : ''}`}
+            className={`btn mt-3 sideBarItem ${pathname === '/search' ? 'text-light bg-dark' : ''}`}
           >
             <i className="fa-solid fa-magnifying-glass font-30" />
           </button>
         </LinkContainer>
-        <button
-          title="New Post"
-          type="button"
-          className={`btn mt-3 sideBarItem ${pathname === '/newPost' ? 'bg-dark text-white' : ''}`}
-        >
-          <i className="fa-solid fa-circle-plus font-30" />
-        </button>
+        <LinkContainer to="/new">
+          <button
+            title="New Experience"
+            type="button"
+            className={`btn mt-3 sideBarItem ${pathname === '/new' ? 'text-light bg-dark' : ''}`}
+          >
+            <i className="fa-solid fa-circle-plus font-30" />
+          </button>
+        </LinkContainer>
       </div>
       <div className="bottom-section d-flex flex-column pb-2">
         <LinkContainer to="/profile">
           <button
             title="Profile"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/profile' ? 'bg-dark text-white' : ''}`}
+            className={`btn mt-3 sideBarItem ${pathname === '/profile' ? 'text-light bg-dark' : ''}`}
           >
             <i className="fa-solid fa-user font-30" />
           </button>
@@ -59,7 +52,7 @@ function SideBar() {
           <button
             title="Settings"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname.startsWith('/settings') ? 'bg-dark text-white' : ''}`}
+            className={`btn mt-3 sideBarItem ${pathname.startsWith('/settings') ? 'text-light bg-dark' : ''}`}
           >
             <i className="fa-solid fa-gear font-30" />
           </button>
@@ -88,9 +81,9 @@ function Dashboard() {
         </div>
         <div>
           <Routes>
-            <Route path="/notifications" element={<Notifications setHeader={setHeader} />} />
             <Route path="/search" element={<Search setHeader={setHeader} />} />
             <Route path="/profile" element={<Profile setHeader={setHeader} />} />
+            <Route path="/new" element={<NewExperience setHeader={setHeader} />} />
             <Route path="/settings/editProfile" element={<EditProfile setHeader={setHeader} />} />
             <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
           </Routes>

@@ -2,7 +2,7 @@
 .sideBar {
   width: 100px;
   height: 100vh;
-  border-right: 3px solid rgb(20, 20, 14);
+  border-right: 2px solid var(--bs-secondary);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,7 +15,7 @@
 }
 
 .page-header {
-  border-bottom: 3px solid rgb(20, 20, 14);
+  border-bottom: 3px solid var(--bs-secondary);
   background: white;
   width: calc(100vw - 100px);
   height: 70px;
