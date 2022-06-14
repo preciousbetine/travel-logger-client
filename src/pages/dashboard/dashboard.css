@@ -22,7 +22,7 @@
 .page-header {
   border-bottom: 3px solid var(--bs-secondary);
   background: white;
-  width: 100%;
+  width: calc(100vw - 90px);
   height: 70px;
   position: fixed;
   z-index: 1;
@@ -53,7 +53,7 @@
     display: block;
   }
 
-  .mainPage, .page-header {
+.mainPage, .page-header {
     width: 700px;
     border-right: 2px solid var(--bs-secondary);
   }
@@ -62,6 +62,10 @@
 @media only screen and (max-width: 550px) {
   .dashboard {
     flex-direction: column-reverse;
+  }
+
+  .page-header {
+    width: 100%;
   }
 
   .sideBar {

@@ -18,7 +18,6 @@ function Profile(props) {
   );
   useEffect(() => {
     setHeader(nav);
-    console.log('Fetching Experiences');
     fetch(`http://localhost:5000/myExperiences?index=${currentIndex}`, {
       credentials: 'include',
     })
@@ -30,8 +29,22 @@ function Profile(props) {
       });
   }, []);
 
+  const onScroll = (e) => {
+    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
+      fetch(`http://localhost:5000/myExperiences?index=${currentIndex}`, {
+        credentials: 'include',
+      })
+        .then((res) => res.json()).then((res) => {
+          setCurrentIndex(currentIndex + 10);
+          addExperiences([...experiences, ...res.experiences]);
+        }).catch((err) => {
+          console.log('Fetch experiences failed', err);
+        });
+    }
+  };
+
   return (
-    <div className="profilePage">
+    <div className="profilePage" onScroll={onScroll}>
       <div className="profileDiv">
         <img
           src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
@@ -59,7 +72,7 @@ function Profile(props) {
         <table className="table">
           <thead className="bg-dark text-light">
             <tr>
-              <th scope="col">My Experiences</th>
+              <th className="col ps-4">My Experiences</th>
             </tr>
           </thead>
           <tbody>
