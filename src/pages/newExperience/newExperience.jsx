@@ -16,16 +16,14 @@ class NewExperience extends React.Component {
     super();
     this.setHeader = props.setHeader;
     this.state = {
-      placesVisited: [],
-      images: [],
       experienceName: '',
-      travelCost: '',
+      description: '',
+      images: [],
     };
-    this.selectImages = this.selectImages.bind(this);
-    this.addLocation = this.addLocation.bind(this);
-    this.removeLocation = this.removeLocation.bind(this);
-    this.makePost = this.makePost.bind(this);
     this.inputChanged = this.inputChanged.bind(this);
+    this.addImages = this.addImages.bind(this);
+    this.removeImage = this.removeImage.bind(this);
+    this.makePost = this.makePost.bind(this);
   }
 
   componentDidMount() {
@@ -37,12 +35,10 @@ class NewExperience extends React.Component {
         </span>
       </div>
     );
-    document.getElementById('postImage1').style.visibility = 'hidden';
-    document.getElementById('postImage2').style.visibility = 'hidden';
     this.setHeader(headerComponent);
   }
 
-  selectImages = () => {
+  addImages() {
     const input = document.createElement('input');
     const newImages = [];
     input.type = 'file';
@@ -51,12 +47,10 @@ class NewExperience extends React.Component {
     input.onchange = () => {
       const files = Array.from(input.files);
       if (FileReader && files && files.length) {
-        if (files.length > 2) {
-          console.log('Max of 2 Images');
+        if (files.length > 4) {
+          console.log('Max of 4 Images');
           return;
         }
-        if (files.length > 0) document.getElementById('postImage1').style.visibility = 'visible';
-        if (files.length > 1) document.getElementById('postImage2').style.visibility = 'visible';
         files.forEach((file, index) => {
           const fr = new FileReader();
           fr.onload = () => {
@@ -67,29 +61,15 @@ class NewExperience extends React.Component {
           };
           fr.readAsDataURL(file);
         });
-      } else {
-        document.getElementById('postImage1').style.visibility = 'hidden';
-        document.getElementById('postImage2').style.visibility = 'hidden';
       }
     };
     input.click();
-  };
-
-  addLocation(e) {
-    const { placesVisited } = this.state;
-    if (e.key === 'Enter' && e.target.value.trim() !== '') {
-      this.setState({
-        placesVisited: [...placesVisited, e.target.value.trim()],
-      });
-      e.target.value = '';
-    }
   }
 
-  removeLocation(id) {
-    const { placesVisited } = this.state;
-    this.setState({
-      placesVisited: placesVisited.filter((item, index) => index !== id),
-    });
+  removeImage(index) {
+    const { images } = this.state;
+    images.splice(index, 1);
+    this.setState({ images });
   }
 
   makePost() {
@@ -119,8 +99,8 @@ class NewExperience extends React.Component {
         this.setState({ experienceName: e.target.value });
         break;
       }
-      case 'travelCost': {
-        this.setState({ travelCost: e.target.value });
+      case 'description': {
+        this.setState({ description: e.target.value });
         break;
       }
       default: break;
@@ -129,74 +109,59 @@ class NewExperience extends React.Component {
 
   render() {
     const {
-      placesVisited,
-      images,
       experienceName,
-      travelCost,
+      description,
+      images,
     } = this.state;
     return (
       <div className="newExperience text-dark fw-bold">
         <form>
           <div className="row">
             <label htmlFor="experienceName" className="col-md-6 col-sm-6 mb-2">
-              Label Experience
+              Label Your Experience
               <input type="text" className="form-control mt-2" id="experienceName" value={experienceName} onChange={this.inputChanged} />
             </label>
-            <label htmlFor="travelCost" className="col-md-6 col-sm-6 mb-2">
-              Add Travel Cost
-              <input type="text" className="form-control mt-2" id="travelCost" value={travelCost} onChange={this.inputChanged} />
+            <label htmlFor="description" className="mb-2">
+              Describe Your Experience
+              {' '}
+              (
+              {250 - description.length}
+              {' '}
+              Words Left )
+              <textarea
+                rows={10}
+                className="form-control mt-2"
+                id="description"
+                value={description}
+                style={{ resize: 'none' }}
+                onChange={this.inputChanged}
+                maxLength="250"
+              />
             </label>
-            <label htmlFor="placesVisited" className="mb-2 mt-2">
-              Places Visited (Press Enter to Add)
-              <div className="mt-3" id="placesVisited">
-                <span className="d-inline-block">
-                  <ul className="m-0 p-0">
-                    {
-                    placesVisited.map((place, index) => (
-                      <li key={`${place}&&${Math.random()}`}>
-                        <span className="badge bg-dark text-light p-2 me-2 mb-2 font-15">
-                          <i className="fa-solid fa-location-dot me-2" />
-                          {place}
-                          <i
-                            className="fa-solid fa-circle-xmark ms-2"
-                            onClick={() => this.removeLocation(index)}
-                            onKeyDown={() => {}}
-                            role="button"
-                            tabIndex={index}
-                            aria-label="Places Visited"
-                          />
-                        </span>
-                      </li>
-                    ))
-                  }
-                    <li>
-                      <span className="d-inline-block">
-                        <input
-                          type="text"
-                          placeholder="Add location"
-                          className="locationInput"
-                          onKeyUp={this.addLocation}
-                        />
-                      </span>
-                    </li>
-                  </ul>
-                </span>
-              </div>
-            </label>
-            <div>
-              <button
-                onClick={() => { this.selectImages(); }}
-                className="btn btn-dark border border-light d-flex justify-content-center align-items-center mt-3"
-                type="button"
-              >
-                <i className="fa-solid fa-image font-30 me-2" />
-                Add Images
-              </button>
-            </div>
-            <div className="imageHolder mt-3">
-              <img id="postImage1" alt="" src={images[0]} className="postImage me-2" />
-              <img id="postImage2" alt="" src={images[1] || null} className="postImage" />
-            </div>
+          </div>
+          <button
+            className="btn btn-dark mt-1"
+            type="button"
+            onClick={this.addImages}
+          >
+            <i className="fa fa-image me-2" />
+            Add Images
+          </button>
+          <div className="d-flex pt-3">
+            {
+              images.map((image, index) => (
+                <div key={image} className="position-relative">
+                  <button
+                    type="button"
+                    className="position-absolute btn btn-light end-0 font-10"
+                    onClick={() => { this.removeImage(index); }}
+                  >
+                    Remove
+                  </button>
+                  <img src={image} alt="" className="postImage" />
+                </div>
+              ))
+            }
           </div>
         </form>
       </div>

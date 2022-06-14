@@ -9,6 +9,11 @@
   align-items: center;
 }
 
+.rightSideBar {
+  width: calc(100vw - 800px);
+  display: none;
+}
+
 .sideBarItem {
   width: max-content;
   padding: 15px;
@@ -17,14 +22,14 @@
 .page-header {
   border-bottom: 3px solid var(--bs-secondary);
   background: white;
-  width: calc(100vw - 100px);
+  width: 100%;
   height: 70px;
   position: fixed;
   z-index: 1;
 }
 
 .mainPage {
-  width: calc(100vw - 100px);
+  width: 100%;
   height: 100vh;
 }
 
@@ -33,4 +38,55 @@
 }
 .font-20 {
   font-size: 20px;
+}
+
+.dashboard {
+  display: flex;
+}
+
+.top-section, .bottom-section {
+  flex-direction: column;
+}
+
+@media only screen and (min-width: 1000px) {
+  .rightSideBar {
+    display: block;
+  }
+
+  .mainPage, .page-header {
+    width: 700px;
+    border-right: 2px solid var(--bs-secondary);
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .dashboard {
+    flex-direction: column-reverse;
+  }
+
+  .sideBar {
+    width: 100vw;;
+    height: 80px;
+    border-right: none;
+    position: fixed;
+    flex-direction: row;
+    z-index: 1;
+    background-color: white;
+    justify-content: center;
+    border-top: 2px solid var(--bs-secondary);
+  }
+
+  .top-section, .bottom-section {
+    flex-direction: row;
+  }
+
+  .sideBarItem {
+    padding: 12px;
+    margin-top: 0px !important;
+    margin-right: 20px;
+  }
+
+  .profilePage, .settingsPage, .newExperience {
+    height: calc(100vh - 150px);
+  }
 }

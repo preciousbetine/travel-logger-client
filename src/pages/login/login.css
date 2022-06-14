@@ -52,3 +52,13 @@
   box-shadow: none !important;
   outline: none !important;
 }
+
+@media only screen and (max-width: 700px) {
+  .sidePanel {
+    display: none;
+  }
+  
+  .loginPanel {
+    width: 100vw;
+  }
+}

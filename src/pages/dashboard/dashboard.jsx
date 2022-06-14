@@ -18,7 +18,7 @@ function SideBar() {
   const { pathname } = useLocation();
   return (
     <div className="sideBar p-2">
-      <div className="top-section d-flex flex-column">
+      <div className="top-section d-flex">
         <LinkContainer to="/search">
           <button
             title="Find other travellers"
@@ -38,7 +38,7 @@ function SideBar() {
           </button>
         </LinkContainer>
       </div>
-      <div className="bottom-section d-flex flex-column pb-2">
+      <div className="bottom-section d-flex pb-2">
         <LinkContainer to="/profile">
           <button
             title="Profile"
@@ -73,7 +73,7 @@ function Dashboard() {
     } else if (location.pathname === '/') navigate('/profile');
   });
   return (
-    <div className="dashboard d-flex justify-content-center align-items-between">
+    <div className="dashboard">
       <SideBar />
       <div className="mainPage">
         <div className="page-header d-flex align-items-center px-3 font-20">
@@ -89,6 +89,7 @@ function Dashboard() {
           </Routes>
         </div>
       </div>
+      <div className="rightSideBar" />
     </div>
   );
 }

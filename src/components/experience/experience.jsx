@@ -6,38 +6,49 @@ function Experience(props) {
   const {
     datePosted,
     experienceName,
-    travelCost,
-    placesVisited,
+    description,
+    images,
   } = props;
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
+  const dateString = `${date.getDay()} 
+                      ${months[date.getMonth()]}
+                      ${date.getFullYear()}, 
+                      ${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 })}:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 })}`;
+
   return (
     <tr className="experience">
       <td>
-        <div>
-          <span className="d-flex align-items-center">
-            <span className="pe-2">{`${date.getDay()} ${months[date.getMonth()]} ${date.getFullYear()}, ${date.getHours()}:${date.getMinutes()}`}</span>
-            -
-            <span className="fw-bold ps-2">{experienceName}</span>
+        <div className="d-flex justify-content-between align-items-center p-2">
+          <span className="bg-dark text-light text-center p-3 py-1 fw-bold rounded-pill font-15">
+            <i className="fa-solid fa-calendar-days me-2" />
+            <span>
+              { dateString }
+            </span>
           </span>
+          <button type="button" className="btn btn-link text-danger">delete</button>
         </div>
-        <div className="p-2 pt-0">
-          <div className="mb-2 fw-bold">Places Visited :</div>
-          <div className="px-3">
-            {placesVisited.map((place) => (
-              <span key={place} className="badge bg-dark text-light p-2 me-2 mb-2 font-15">
-                <i className="fa-solid fa-location-dot me-2" />
-                {place}
-              </span>
-            ))}
+        <div className="mx-3 mb-2 p-3 py-1 fw-bold">
+          { experienceName }
+          {'  '}
+          ----
+          {'  '}
+          { description }
+        </div>
+        {images.length ? (
+          <div>
+            { (images.length > 1) ? (
+              <div className="post-image-div p-2 m-3 my-1">
+                <img className="post-image-1" alt="" src={`http://localhost:5000/photo/${images[0]}`} />
+                <img className="post-image-2" alt="" src={`http://localhost:5000/photo/${images[1]}`} />
+              </div>
+            ) : (
+              <div className="post-image-div p-2 m-3 my-1">
+                <img className="post-image" alt="" src={`http://localhost:5000/photo/${images[0]}`} />
+              </div>
+            )}
           </div>
-          <span className="fw-bold">Travel Cost :</span>
-          <span className="badge bg-dark text-light font-15 ms-2">{travelCost}</span>
-        </div>
-        {/* <div className="p-2 d-flex justify-content-center">
-            <img alt="" className="postImages" src={`http://localhost:5000/photo/${images[0]}`} />
-            <img alt="" className="postImages" src={`http://localhost:5000/photo/${images[1]}`} />
-          </div> */}
+        ) : null}
       </td>
     </tr>
   );
@@ -45,10 +56,11 @@ function Experience(props) {
 
 Experience.propTypes = {
   datePosted: PropTypes.string.isRequired,
-  placesVisited: PropTypes.arrayOf(PropTypes.string).isRequired,
-  // images: PropTypes.arrayOf(PropTypes.string).isRequired,
+  images: PropTypes.arrayOf(
+    PropTypes.string.isRequired,
+  ).isRequired,
   experienceName: PropTypes.string.isRequired,
-  travelCost: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
 };
 
 export default Experience;

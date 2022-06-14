@@ -70,9 +70,8 @@ function Profile(props) {
                     key={experience.datePosted}
                     datePosted={experience.datePosted}
                     experienceName={experience.experienceName}
-                    travelCost={experience.travelCost}
-                    placesVisited={experience.placesVisited}
                     images={experience.images}
+                    description={experience.description}
                   />
                 ),
               )

@@ -8,11 +8,14 @@
   user-select: none;
 }
 
-.locationInput, .locationInput:focus {
+.locationInput, .locationInput:focus, .heritageInput, .heritageInput:focus {
   outline: none;
   border: none;
 }
 
+.font-10 {
+  font-size: 10px;
+}
 .font-15 {
   font-size: 15px;
 }
@@ -25,12 +28,9 @@ li {
 }
 
 .postImage {
-  width: 40%;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border-radius: 20px;
-}
-
-.imageHolder {
-  padding: 0px;
+  border: 2px solid white;
 }

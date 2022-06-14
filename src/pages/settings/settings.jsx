@@ -193,7 +193,6 @@ export function EditProfile(props) {
         <label htmlFor="newUserBio" className="text-dark w-100 mt-3">
           Bio [Length : 200 Characters Max]
           <textarea
-            type="text"
             style={{ resize: 'none' }}
             maxLength="200"
             className="form-control mt-2"
