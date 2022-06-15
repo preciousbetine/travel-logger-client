@@ -47,8 +47,8 @@ class NewExperience extends React.Component {
     input.onchange = () => {
       const files = Array.from(input.files);
       if (FileReader && files && files.length) {
-        if (files.length > 4) {
-          console.log('Max of 4 Images');
+        if (files.length > 2) {
+          console.log('Max of 2 Images');
           return;
         }
         files.forEach((file, index) => {

@@ -5,12 +5,14 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { userData } from '../../redux/userDataSlice';
 import Experience from '../../components/experience/experience';
+import Loader from '../../components/loader/loader';
 import './profile.css';
 
 function Profile(props) {
   const { setHeader } = props;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [experiences, addExperiences] = useState([]);
+  const [postsLoaded, setPostsLoaded] = useState(false);
   const user = useSelector(userData);
 
   const nav = (
@@ -24,6 +26,7 @@ function Profile(props) {
       .then((res) => res.json()).then((res) => {
         setCurrentIndex(currentIndex + 10);
         addExperiences([...experiences, ...res.experiences]);
+        setPostsLoaded(true);
       }).catch((err) => {
         console.log('Fetch experiences failed', err);
       });
@@ -62,15 +65,18 @@ function Profile(props) {
   return (
     <div className="profilePage" id="profilePage" onScroll={onScroll}>
       <div className="profileDiv">
-        <img
-          src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
-          alt=""
-          className="userImage"
-        />
-        <div className="d-flex flex-column justify-content-center align-items-start">
-          <h2>{user.name}</h2>
-          <div className="infoDisplay mb-1">
-            {
+        {
+          user.ready ? (
+            <>
+              <img
+                src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                alt=""
+                className="userImage"
+              />
+              <div className="d-flex flex-column justify-content-center align-items-start">
+                <h2>{user.name}</h2>
+                <div className="infoDisplay mb-1">
+                  {
               (user.location && user.location.trim !== '') ? (
                 <div>
                   <i className="fa-solid fa-location-dot text-center w-20" />
@@ -78,7 +84,7 @@ function Profile(props) {
                 </div>
               ) : null
             }
-            {
+                  {
               (user.website && user.website.trim !== '') ? (
                 <div>
                   <i className="fa-solid fa-link text-center w-20" />
@@ -86,12 +92,15 @@ function Profile(props) {
                 </div>
               ) : null
             }
-            <div className="text-secondary px-2 pt-2">{user.description}</div>
-          </div>
-          <LinkContainer to="/settings/editProfile">
-            <button type="button" className="btn p-0 btn-link text-dark">Edit Profile</button>
-          </LinkContainer>
-        </div>
+                  <div className="text-secondary px-2 pt-2">{user.description}</div>
+                </div>
+                <LinkContainer to="/settings/editProfile">
+                  <button type="button" className="btn p-0 btn-link text-dark">Edit Profile</button>
+                </LinkContainer>
+              </div>
+            </>
+          ) : <Loader />
+        }
       </div>
       <div className="pb-3">
         <table className="table table-striped">
@@ -102,22 +111,48 @@ function Profile(props) {
           </thead>
           <tbody>
             {
-              experiences.map(
-                (experience) => (
-                  <Experience
-                    key={experience.datePosted}
-                    datePosted={experience.datePosted}
-                    experienceName={experience.experienceName}
-                    images={experience.images}
-                    description={experience.description}
-                    deleteExperience={() => {
-                      deleteExperience(experience.postId);
-                      document.getElementById('profilePage').scrollTop = 0;
-                    }}
-                    showDeleteOption
-                  />
-                ),
+              postsLoaded ? (
+                <>
+                  {
+                    (experiences.length > 0) ? (experiences.map(
+                      (experience) => (
+                        <Experience
+                          key={experience.datePosted}
+                          datePosted={experience.datePosted}
+                          experienceName={experience.experienceName}
+                          images={experience.images}
+                          description={experience.description}
+                          deleteExperience={() => {
+                            deleteExperience(experience.postId);
+                            document.getElementById('profilePage').scrollTop = 0;
+                          }}
+                          showDeleteOption
+                        />
+                      ),
+                    )) : (
+                      <div className="text-center mt-5 text-secondary">
+                        <i className="fa-solid fa-file font-30" />
+                        <div>You have not shared any experiences yet.</div>
+                        <LinkContainer to="/new">
+                          <button type="button" className="btn bg-secondary text-light my-2">Share a New Experience</button>
+                        </LinkContainer>
+                      </div>
+                    )
+                  }
+                  <tr>
+                    <td>
+                      <span />
+                    </td>
+                  </tr>
+                </>
               )
+                : (
+                  <tr>
+                    <td>
+                      <Loader />
+                    </td>
+                  </tr>
+                )
             }
           </tbody>
         </table>

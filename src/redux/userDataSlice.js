@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const initialState = {};
+const initialState = {
+  ready: false,
+};
 
 export const fetchUserData = createAsyncThunk(
   'user/fetchData',
@@ -31,6 +33,7 @@ export const userDataSlice = createSlice({
       state.description = '';
       state.followingCount = '';
       state.followersCount = '';
+      state.ready = false;
     },
   },
   extraReducers: (builder) => {
@@ -43,6 +46,7 @@ export const userDataSlice = createSlice({
       state.description = action.payload.description;
       state.followingCount = action.payload.followingCount;
       state.followersCount = action.payload.followersCount;
+      state.ready = true;
     });
   },
 });

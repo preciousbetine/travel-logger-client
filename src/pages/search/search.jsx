@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
 import './search.css';
@@ -10,7 +10,9 @@ function Search(props) {
   const [user, setUser] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [experiences, addExperiences] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
   const id = new URLSearchParams(search).get('id');
+  const navigate = useNavigate();
 
   const nav = (
     <Link to="/search" className="text-dark text-decoration-none">Find Other Travellers</Link>
@@ -55,6 +57,18 @@ function Search(props) {
     }
   };
 
+  const searchDatabase = async (e) => {
+    if (e.target.value.trim().length === 0) { setSearchResults([]); } else {
+      let result = await fetch(`http://localhost:5000/searchUser/${e.target.value.trim()}`);
+      result = await result.json();
+      setSearchResults(result.users);
+    }
+  };
+
+  const showUserProfile = (userId) => {
+    navigate(`/search?id=${userId}`);
+  };
+
   return (
     <div className="searchPage" onScroll={onScroll}>
       {id ? (
@@ -97,25 +111,62 @@ function Search(props) {
               </thead>
               <tbody>
                 {
-              experiences.map(
-                (experience) => (
-                  <Experience
-                    key={experience.datePosted}
-                    datePosted={experience.datePosted}
-                    experienceName={experience.experienceName}
-                    images={experience.images}
-                    description={experience.description}
-                    deleteExperience={() => {}}
-                    showDeleteOption={false}
-                  />
-                ),
-              )
-            }
+                  (experiences.length > 0) ? (
+                    experiences.map(
+                      (experience) => (
+                        <Experience
+                          key={experience.datePosted}
+                          datePosted={experience.datePosted}
+                          experienceName={experience.experienceName}
+                          images={experience.images}
+                          description={experience.description}
+                          deleteExperience={() => {}}
+                          showDeleteOption={false}
+                        />
+                      ),
+                    )
+                  ) : (
+                    <div className="text-center mt-5 text-secondary">
+                      <i className="fa-solid fa-file font-30" />
+                      <div>This user has not posted any experiences yet.</div>
+                    </div>
+                  )
+                }
               </tbody>
             </table>
           </div>
         </>
-      ) : null}
+      ) : (
+        <div>
+          <input className="font-20 p-3 form-control" placeholder="Start Typing To Search..." onChange={searchDatabase} />
+          <div>
+            {
+              searchResults.map(
+                (result, index) => (
+                  <div
+                    onClick={() => showUserProfile(result.id)}
+                    role="button"
+                    tabIndex={index + 40}
+                    onKeyDown={() => {}}
+                    className="my-2 p-2 bg-light d-flex align-items-center border border-secondary rounded-2"
+                  >
+                    <span>
+                      <img
+                        alt=""
+                        className="smallImg me-3 border border-light"
+                        src={`http://localhost:5000/photo/${result.picture}`}
+                      />
+                    </span>
+                    <span className="d-flex flex-column align-items-start">
+                      <span>{result.name}</span>
+                    </span>
+                  </div>
+                ),
+              )
+            }
+          </div>
+        </div>
+      )}
     </div>
   );
 }
