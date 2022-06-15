@@ -35,16 +35,32 @@ function Profile(props) {
         credentials: 'include',
       })
         .then((res) => res.json()).then((res) => {
-          setCurrentIndex(currentIndex + 10);
-          addExperiences([...experiences, ...res.experiences]);
+          if (res.experiences.length > 0) {
+            setCurrentIndex(currentIndex + 10);
+            addExperiences([...experiences, ...res.experiences]);
+          }
         }).catch((err) => {
           console.log('Fetch experiences failed', err);
         });
     }
   };
 
+  const deleteExperience = (id) => {
+    console.log(id);
+    fetch(`http://localhost:5000/experience/${id}`, {
+      credentials: 'include',
+      method: 'DELETE',
+    })
+      .then((res) => res.json()).then((res) => {
+        setCurrentIndex(10);
+        addExperiences([...res.experiences]);
+      }).catch((err) => {
+        console.log('Fetch experiences failed', err);
+      });
+  };
+
   return (
-    <div className="profilePage" onScroll={onScroll}>
+    <div className="profilePage" id="profilePage" onScroll={onScroll}>
       <div className="profileDiv">
         <img
           src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
@@ -85,6 +101,10 @@ function Profile(props) {
                     experienceName={experience.experienceName}
                     images={experience.images}
                     description={experience.description}
+                    deleteExperience={() => {
+                      deleteExperience(experience.postId);
+                      document.getElementById('profilePage').scrollTop = 0;
+                    }}
                   />
                 ),
               )

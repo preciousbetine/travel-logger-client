@@ -8,6 +8,7 @@ function Experience(props) {
     experienceName,
     description,
     images,
+    deleteExperience,
   } = props;
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
@@ -26,7 +27,7 @@ function Experience(props) {
               { dateString }
             </span>
           </span>
-          <button type="button" className="btn btn-link text-danger">delete</button>
+          <button type="button" className="btn btn-link text-danger" onClick={deleteExperience}>delete</button>
         </div>
         <div className="mx-3 mb-2 p-3 py-1 fw-bold">
           { experienceName }
@@ -61,6 +62,7 @@ Experience.propTypes = {
   ).isRequired,
   experienceName: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  deleteExperience: PropTypes.func.isRequired,
 };
 
 export default Experience;
