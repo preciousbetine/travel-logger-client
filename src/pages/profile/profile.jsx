@@ -70,14 +70,23 @@ function Profile(props) {
         <div className="d-flex flex-column justify-content-center align-items-start">
           <h2>{user.name}</h2>
           <div className="infoDisplay mb-1">
-            <div>
-              <i className="fa-solid fa-location-dot text-center w-20" />
-              <span className="ms-2">{user.location}</span>
-            </div>
-            <div>
-              <i className="fa-solid fa-link text-center w-20" />
-              <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
-            </div>
+            {
+              (user.location && user.location.trim !== '') ? (
+                <div>
+                  <i className="fa-solid fa-location-dot text-center w-20" />
+                  <span className="ms-2">{user.location}</span>
+                </div>
+              ) : null
+            }
+            {
+              (user.website && user.website.trim !== '') ? (
+                <div>
+                  <i className="fa-solid fa-link text-center w-20" />
+                  <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
+                </div>
+              ) : null
+            }
+            <div className="text-secondary px-2 pt-2">{user.description}</div>
           </div>
           <LinkContainer to="/settings/editProfile">
             <button type="button" className="btn p-0 btn-link text-dark">Edit Profile</button>
@@ -85,8 +94,8 @@ function Profile(props) {
         </div>
       </div>
       <div className="pb-3">
-        <table className="table">
-          <thead className="bg-dark text-light">
+        <table className="table table-striped">
+          <thead className="">
             <tr>
               <th className="col ps-4">My Experiences</th>
             </tr>
@@ -105,6 +114,7 @@ function Profile(props) {
                       deleteExperience(experience.postId);
                       document.getElementById('profilePage').scrollTop = 0;
                     }}
+                    showDeleteOption
                   />
                 ),
               )

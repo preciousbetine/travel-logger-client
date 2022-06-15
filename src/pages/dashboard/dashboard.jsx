@@ -67,11 +67,25 @@ function Dashboard() {
   const navigate = useNavigate();
   const newUser = useSelector(isNewUser);
   const [header, setHeader] = useState('');
+  const [randomUsers, setRandomUsers] = useState([]);
   useEffect(() => {
     if (newUser) {
       navigate('/settings/editProfile');
     } else if (location.pathname === '/') navigate('/profile');
-  });
+    fetch('http://localhost:5000/randomUsers', {
+      credentials: 'include',
+    })
+      .then((res) => res.json()).then((res) => {
+        setRandomUsers(res.users);
+      }).catch((err) => {
+        console.log('Fetch users failed', err);
+      });
+  }, []);
+
+  const showUserProfile = (id) => {
+    navigate(`/search?id=${id}`);
+  };
+
   return (
     <div className="dashboard">
       <SideBar />
@@ -82,6 +96,7 @@ function Dashboard() {
         <div>
           <Routes>
             <Route path="/search" element={<Search setHeader={setHeader} />} />
+            <Route path="/search/*" element={<Search setHeader={setHeader} />} />
             <Route path="/profile" element={<Profile setHeader={setHeader} />} />
             <Route path="/new" element={<NewExperience setHeader={setHeader} />} />
             <Route path="/settings/editProfile" element={<EditProfile setHeader={setHeader} />} />
@@ -89,7 +104,36 @@ function Dashboard() {
           </Routes>
         </div>
       </div>
-      <div className="rightSideBar" />
+      <div className="rightSideBar">
+        <div className="discover">
+          <h4 className="mb-4 mt-2">Discover</h4>
+          { randomUsers.map((user, index) => (
+            <div
+              key={user.id}
+              className="badge text-dark rounded-pill bg-light w-100 d-flex align-items-center mb-2 font-15 p-4 py-3"
+              onClick={() => showUserProfile(user.id)}
+              role="button"
+              tabIndex={index + 20}
+              onKeyDown={() => {}}
+            >
+              <span>
+                <img
+                  alt=""
+                  className="smallImg me-3 border border-light"
+                  src={`http://localhost:5000/photo/${user.picture}`}
+                />
+              </span>
+              <span className="d-flex flex-column align-items-start">
+                <span>{user.name}</span>
+                <span className="mt-2">
+                  <i className="fa-solid fa-location-dot me-2" />
+                  <span className="text-secondary">{user.location}</span>
+                </span>
+              </span>
+            </div>
+          )) }
+        </div>
+      </div>
     </div>
   );
 }

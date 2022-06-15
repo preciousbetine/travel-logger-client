@@ -9,6 +9,7 @@ function Experience(props) {
     description,
     images,
     deleteExperience,
+    showDeleteOption,
   } = props;
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
@@ -18,7 +19,7 @@ function Experience(props) {
                       ${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 })}:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 })}`;
 
   return (
-    <tr className="experience">
+    <tr className="experience bg-light">
       <td>
         <div className="d-flex justify-content-between align-items-center p-2">
           <span className="bg-dark text-light text-center p-3 py-1 fw-bold rounded-pill font-15">
@@ -27,9 +28,13 @@ function Experience(props) {
               { dateString }
             </span>
           </span>
-          <button type="button" className="btn btn-link text-danger" onClick={deleteExperience}>delete</button>
+          {
+            showDeleteOption ? (
+              <button type="button" className="btn btn-link text-danger" onClick={deleteExperience}>delete</button>
+            ) : null
+          }
         </div>
-        <div className="mx-3 mb-2 p-3 py-1 fw-bold">
+        <div className="mx-3 mb-2 p-3 py-1">
           { experienceName }
           {'  '}
           ----
@@ -63,6 +68,7 @@ Experience.propTypes = {
   experienceName: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   deleteExperience: PropTypes.func.isRequired,
+  showDeleteOption: PropTypes.bool.isRequired,
 };
 
 export default Experience;
