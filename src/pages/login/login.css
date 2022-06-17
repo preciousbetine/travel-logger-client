@@ -11,6 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  animation: 0.5s blacktowhite;
 }
 
 .app-name {
@@ -25,6 +26,8 @@
   border-radius: 10px;
   font-family: 'Indie Flower';
   font-weight: bold;
+  user-select: none;
+  animation: 1s colormix infinite;
 }
 
 .loginPanel {
@@ -34,6 +37,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  user-select: none;
 }
 
 #loginAlertPlaceHolder {
@@ -56,6 +60,7 @@
   background-image: url(bckg.jfif);
   opacity: 0.8;
   background-size: cover;
+  animation: 0.5s pushin;
 }
 
 .title-text {
@@ -77,6 +82,10 @@
   margin-bottom: 5px;
 }
 
+.form-control {
+  box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
 #login-form, #signup-form {
   display: flex;
   flex-direction: column;
@@ -84,9 +93,46 @@
   width: 300px;
 }
 
-.form-control, .btn, .btn-close {
-  box-shadow: none !important;
+.btn, .btn-close {
   outline: none !important;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+  border: 1px solid var(--bs-secondary) !important;
+}
+
+@keyframes colormix {
+  0% {
+    color: green;
+  }
+  25% {
+    color: black;
+  }
+  50% {
+    color: green;
+  }
+  75% {
+    color: black;
+  }
+}
+
+@keyframes pushin {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 40vw;
+  }
+}
+
+@keyframes blacktowhite {
+  0% {
+    background-color: brown;
+  }
+  100% {
+    background-color: white;
+  }
 }
 
 @media only screen and (max-width: 700px) {

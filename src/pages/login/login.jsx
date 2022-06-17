@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setLoggedInState, setNewUser } from '../../redux/loginSlice';
 import { fetchUserData } from '../../redux/userDataSlice';
+import Alert from '../../components/Alert/Alert';
 
 function LoginPage(props) {
   const dispatch = useDispatch();
@@ -16,22 +17,6 @@ function LoginPage(props) {
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
   const [emailMessage, setEmailMessage] = useState('');
-
-  const Alert = (message, type) => {
-    const alertPlaceholder = document.getElementById('loginAlertPlaceHolder');
-    alertPlaceholder.innerText = '';
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = `
-      <div id="alert" class="alert alert-${type} alert-dismissible fade show" role="alert">
-      <strong>Error: </strong>
-      ${message}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
-      </div>`;
-    alertPlaceholder.append(wrapper);
-    $('#alert').fadeTo(2000, 500).slideUp(500, () => {
-      $('#alert').slideUp(500);
-    });
-  };
 
   const loggedIn = ({ credential }) => {
     const xhr = new XMLHttpRequest();
@@ -45,14 +30,19 @@ function LoginPage(props) {
           credentials: 'include',
         }).then((res) => res.json()).then(async (res) => {
           if (res.error) {
-            Alert(res.error, 'danger');
+            Alert(res.error, 'danger', 'loginAlertPlaceHolder');
             navigate('/login');
+            return;
           }
-          await dispatch(setLoggedInState(true));
-          if (res.isNewUser) await dispatch(setNewUser(true));
-          await dispatch(fetchUserData());
+          $('.loginPanel').fadeOut(500);
+          $('.sidePanel').animate({ width: '0px' }, 200);
+          dispatch(fetchUserData());
+          if (res.isNewUser) dispatch(setNewUser(true));
+          setTimeout(async () => {
+            await dispatch(setLoggedInState(true));
+          }, 700);
         }).catch((err) => {
-          Alert(err, 'danger');
+          Alert(err, 'danger', 'loginAlertPlaceHolder');
           navigate('/login');
         });
       }
@@ -98,7 +88,7 @@ function LoginPage(props) {
     } else {
       const result = validateForm();
       if (result.error) {
-        Alert(result.error, 'danger');
+        Alert(result.error, 'danger', 'loginAlertPlaceHolder');
         return;
       }
       endPoint = 'emailSignUp';
@@ -114,12 +104,14 @@ function LoginPage(props) {
     }).then((res) => res.json()).then(async (user) => {
       if (user.error) {
         // Show an alert to the user
-        Alert(user.error, 'danger');
+        Alert(user.error, 'danger', 'loginAlertPlaceHolder');
         if (e.target.id === 'login-form') document.getElementById('password').focus();
         else document.getElementById('email').focus();
         return;
       }
       if (endPoint === 'emailSignUp') dispatch(setNewUser(true));
+      $('.loginPanel').fadeOut(500);
+      $('.sidePanel').animate({ width: '0px' });
       await dispatch(fetchUserData());
       await dispatch(setLoggedInState(true));
     });
@@ -179,7 +171,7 @@ function LoginPage(props) {
     <div className="App">
       <div id="loginAlertPlaceHolder" />
       <div className="app-name">
-        <h1>Travel Log App</h1>
+        <h1>UpTravel</h1>
         <p>Share Your Experiences with the world</p>
       </div>
       <div className="sidePanel" />
@@ -264,7 +256,7 @@ function LoginPage(props) {
             onSuccess={loggedIn}
             width="300px"
             onError={() => {
-              Alert('Login Failed', 'danger');
+              Alert('Login Failed', 'danger', 'loginAlertPlaceHolder');
             }}
             text="continue_with"
           />

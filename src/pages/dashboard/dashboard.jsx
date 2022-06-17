@@ -12,6 +12,7 @@ import Search from '../search/search';
 import Profile from '../profile/profile';
 import NewExperience from '../newExperience/newExperience';
 import AllSettings, { EditProfile } from '../settings/settings';
+import Alert from '../../components/Alert/Alert';
 import './dashboard.css';
 
 function SideBar() {
@@ -68,6 +69,7 @@ function Dashboard() {
   const newUser = useSelector(isNewUser);
   const [header, setHeader] = useState('');
   const [randomUsers, setRandomUsers] = useState([]);
+
   useEffect(() => {
     if (newUser) {
       navigate('/settings/editProfile');
@@ -77,8 +79,8 @@ function Dashboard() {
     })
       .then((res) => res.json()).then((res) => {
         setRandomUsers(res.users);
-      }).catch((err) => {
-        console.log('Fetch users failed', err);
+      }).catch(() => {
+        Alert('An Error Occured', 'danger', 'dashboardAlertPlaceHolder');
       });
   }, []);
 
@@ -89,6 +91,7 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <SideBar />
+      <div id="dashboardAlertPlaceHolder" />
       <div className="mainPage">
         <div className="page-header d-flex align-items-center px-3 font-20">
           {header}

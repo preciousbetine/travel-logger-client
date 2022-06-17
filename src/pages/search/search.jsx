@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
+import Loader from '../../components/loader/loader';
 import './search.css';
 
 function Search(props) {
@@ -11,6 +12,7 @@ function Search(props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [experiences, addExperiences] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [pageReady, setPageReady] = useState(false);
   const id = new URLSearchParams(search).get('id');
   const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ function Search(props) {
         setCurrentIndex(0);
         addExperiences([]);
       }
+      setPageReady(true);
     }
 
     if (id) work();
@@ -75,33 +78,37 @@ function Search(props) {
       {id ? (
         <>
           <div className="profileDiv border border-2 rounded-3">
-            <img
-              src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
-              alt=""
-              className="userImage"
-            />
-            <div className="d-flex flex-column justify-content-center align-items-start">
-              <h2>{user.name}</h2>
-              <div className="infoDisplay mb-1">
-                {
-                (user.location && user.location.trim !== '') ? (
-                  <div>
-                    <i className="fa-solid fa-location-dot text-center w-20" />
-                    <span className="ms-2">{user.location}</span>
+            {
+              pageReady ? (
+                <>
+                  <img
+                    src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                    alt=""
+                    className="userImage"
+                  />
+                  <div className="d-flex flex-column justify-content-center align-items-start">
+                    <h2>{user.name}</h2>
+                    <div className="infoDisplay mb-1">
+                      {(user.location && user.location.trim !== '') ? (
+                        <div>
+                          <i className="fa-solid fa-location-dot text-center w-20" />
+                          <span className="ms-2">{user.location}</span>
+                        </div>
+                      ) : null}
+                      {(user.website && user.website.trim !== '') ? (
+                        <div>
+                          <i className="fa-solid fa-link text-center w-20" />
+                          <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
+                        </div>
+                      ) : null}
+                      <div className="text-secondary px-2 pt-2">{user.description}</div>
+                    </div>
                   </div>
-                ) : null
-              }
-                {
-                (user.website && user.website.trim !== '') ? (
-                  <div>
-                    <i className="fa-solid fa-link text-center w-20" />
-                    <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
-                  </div>
-                ) : null
-              }
-                <div className="text-secondary px-2 pt-2">{user.description}</div>
-              </div>
-            </div>
+                </>
+              ) : (
+                <Loader />
+              )
+            }
           </div>
           <div className="pb-3 mt-2">
             <table className="table table-striped">
@@ -110,30 +117,34 @@ function Search(props) {
                   <th className="col ps-4">Experiences</th>
                 </tr>
               </thead>
-              <tbody>
-                {
-                  (experiences.length > 0) ? (
-                    experiences.map(
-                      (experience) => (
-                        <Experience
-                          key={experience.datePosted}
-                          datePosted={experience.datePosted}
-                          experienceName={experience.experienceName}
-                          images={experience.images}
-                          description={experience.description}
-                          deleteExperience={() => {}}
-                          showDeleteOption={false}
-                        />
-                      ),
-                    )
-                  ) : (
-                    <div className="text-center mt-5 text-secondary">
-                      <i className="fa-solid fa-file font-30" />
-                      <div>This user has not posted any experiences yet.</div>
-                    </div>
-                  )
-                }
-              </tbody>
+              {
+                pageReady ? (
+                  <tbody>
+                    {
+                      (experiences.length > 0) ? (
+                        experiences.map(
+                          (experience) => (
+                            <Experience
+                              key={experience.datePosted}
+                              datePosted={experience.datePosted}
+                              experienceName={experience.experienceName}
+                              images={experience.images}
+                              description={experience.description}
+                              deleteExperience={() => {}}
+                              showDeleteOption={false}
+                            />
+                          ),
+                        )
+                      ) : (
+                        <div className="text-center mt-5 text-secondary">
+                          <i className="fa-solid fa-file font-30" />
+                          <div>This user has not posted any experiences yet.</div>
+                        </div>
+                      )
+                    }
+                  </tbody>
+                ) : null
+              }
             </table>
           </div>
         </>
@@ -149,7 +160,7 @@ function Search(props) {
                     role="button"
                     tabIndex={index + 40}
                     onKeyDown={() => {}}
-                    className="my-2 p-2 bg-light d-flex align-items-center border border-secondary rounded-2"
+                    className="my-2 p-2 bg-light d-flex align-items-center rounded-2"
                   >
                     <span>
                       <img

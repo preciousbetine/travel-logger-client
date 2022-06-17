@@ -1,7 +1,8 @@
+/* global bootstrap */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { userData } from '../../redux/userDataSlice';
 import Experience from '../../components/experience/experience';
@@ -13,7 +14,10 @@ function Profile(props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [experiences, addExperiences] = useState([]);
   const [postsLoaded, setPostsLoaded] = useState(false);
+  const [myModal, setMyModal] = useState(null);
+  const [experienceToDelete, setExperienceToDelete] = useState('');
   const user = useSelector(userData);
+  const navigate = useNavigate();
 
   const nav = (
     <Link to="/profile" className="text-dark text-decoration-none">My Profile</Link>
@@ -27,8 +31,9 @@ function Profile(props) {
         setCurrentIndex(currentIndex + 10);
         addExperiences([...experiences, ...res.experiences]);
         setPostsLoaded(true);
-      }).catch((err) => {
-        console.log('Fetch experiences failed', err);
+      }).catch(() => {
+        const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+        toast.show();
       });
   }, []);
 
@@ -42,28 +47,64 @@ function Profile(props) {
             setCurrentIndex(currentIndex + 10);
             addExperiences([...experiences, ...res.experiences]);
           }
-        }).catch((err) => {
-          console.log('Fetch experiences failed', err);
+        }).catch(() => {
+          myModal.hide();
+          navigate('/login');
         });
     }
   };
 
-  const deleteExperience = (id) => {
-    console.log(id);
-    fetch(`http://localhost:5000/experience/${id}`, {
+  const deleteExperience = () => {
+    fetch(`http://localhost:5000/experience/${experienceToDelete}`, {
       credentials: 'include',
       method: 'DELETE',
     })
       .then((res) => res.json()).then((res) => {
+        myModal.hide();
         setCurrentIndex(10);
         addExperiences([...res.experiences]);
-      }).catch((err) => {
-        console.log('Fetch experiences failed', err);
+        const toast = new bootstrap.Toast(document.getElementById('deleteToast'));
+        toast.show();
+        document.getElementById('profilePage').scrollTop = 0;
+      }).catch(() => {
+        myModal.hide();
+        navigate('/login');
       });
   };
 
   return (
     <div className="profilePage" id="profilePage" onScroll={onScroll}>
+      <div className="modal fade" id="deleteExperienceDialog" tabIndex="-1" aria-labelledby="deleteExperienceLabel" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header bg-danger">
+              <h5 className="modal-title text-white" id="deleteExperienceLabel">Delete this experience?</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div className="modal-body d-flex justify-content-between align-items-center">
+              <span>This cannot be undone</span>
+              <span>
+                <button type="button" className="btn btn-link text-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" className="btn btn-danger" onClick={deleteExperience}>Delete</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="deleteToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-danger text-light">
+            Experience Deleted!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="errorToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-danger text-light">
+            An Error Occured!
+          </div>
+        </div>
+      </div>
       <div className="profileDiv">
         {
           user.ready ? (
@@ -121,10 +162,13 @@ function Profile(props) {
                           datePosted={experience.datePosted}
                           experienceName={experience.experienceName}
                           images={experience.images}
+                          postId={experience.postId}
                           description={experience.description}
                           deleteExperience={() => {
-                            deleteExperience(experience.postId);
-                            document.getElementById('profilePage').scrollTop = 0;
+                            setExperienceToDelete(experience.postId);
+                            const modal = new bootstrap.Modal(document.getElementById('deleteExperienceDialog'));
+                            setMyModal(modal);
+                            modal.show();
                           }}
                           showDeleteOption
                         />
