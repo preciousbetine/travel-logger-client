@@ -1,10 +1,11 @@
-/* eslint-disable react/prop-types */
+/* global $ */
 import './login.css';
 import React, { useState } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import PropTypes from 'prop-types';
 import { setLoggedInState, setNewUser } from '../../redux/loginSlice';
 import { fetchUserData } from '../../redux/userDataSlice';
 
@@ -12,6 +13,26 @@ function LoginPage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loginOrSignUp, setLoginOrSignUp] = useState(true);
+  const [passwordMessage, setPasswordMessage] = useState('');
+  const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+
+  const Alert = (message, type) => {
+    const alertPlaceholder = document.getElementById('loginAlertPlaceHolder');
+    alertPlaceholder.innerText = '';
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+      <div id="alert" class="alert alert-${type} alert-dismissible fade show" role="alert">
+      <strong>Error: </strong>
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
+      </div>`;
+    alertPlaceholder.append(wrapper);
+    $('#alert').fadeTo(2000, 500).slideUp(500, () => {
+      $('#alert').slideUp(500);
+    });
+  };
+
   const loggedIn = ({ credential }) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'http://localhost:5000/tokensignin');
@@ -24,20 +45,46 @@ function LoginPage(props) {
           credentials: 'include',
         }).then((res) => res.json()).then(async (res) => {
           if (res.error) {
-            alert(res.error);
+            Alert(res.error, 'danger');
             navigate('/login');
           }
           await dispatch(setLoggedInState(true));
           if (res.isNewUser) await dispatch(setNewUser(true));
           await dispatch(fetchUserData());
         }).catch((err) => {
-          alert(err);
+          Alert(err, 'danger');
           navigate('/login');
         });
       }
     };
     xhr.send(JSON.stringify({ credential }));
   };
+
+  const validateForm = () => {
+    const email = document.getElementById('email').value;
+    const name = document.getElementById('name').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!email.match(emailRegex)) {
+      document.getElementById('email').focus();
+      return { error: 'Please Enter a valid email address' };
+    }
+    if (name.trim().length === 0) {
+      document.getElementById('name').focus();
+      return { error: 'Name Cannot Be Blank!' };
+    }
+    if (password.trim().length < 8) {
+      document.getElementById('password').focus();
+      return { error: 'Enter a Valid Password!' };
+    }
+    if (password !== passwordConfirm) {
+      document.getElementById('passwordConfirm').focus();
+      return { error: 'Passwords Do Not Match!' };
+    }
+    return true;
+  };
+
   const submitForm = (e) => {
     e.preventDefault();
     const bodyObject = {
@@ -49,6 +96,11 @@ function LoginPage(props) {
     if (e.target.id === 'login-form') {
       endPoint = 'emailLogin';
     } else {
+      const result = validateForm();
+      if (result.error) {
+        Alert(result.error, 'danger');
+        return;
+      }
       endPoint = 'emailSignUp';
       bodyObject.name = e.target.name.value;
     }
@@ -61,8 +113,10 @@ function LoginPage(props) {
       body: JSON.stringify(bodyObject),
     }).then((res) => res.json()).then(async (user) => {
       if (user.error) {
-        alert(user.error);
-        navigate('/login');
+        // Show an alert to the user
+        Alert(user.error, 'danger');
+        if (e.target.id === 'login-form') document.getElementById('password').focus();
+        else document.getElementById('email').focus();
         return;
       }
       if (endPoint === 'emailSignUp') dispatch(setNewUser(true));
@@ -70,9 +124,60 @@ function LoginPage(props) {
       await dispatch(setLoggedInState(true));
     });
   };
+  const verifyEmail = (e) => {
+    const email = e.target.value;
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!email.match(emailRegex)) {
+      setEmailMessage('Wrong Email Format');
+      $('#emailMessage').css('display', 'flex');
+    } else {
+      setEmailMessage('');
+      $('#emailMessage').css('display', 'none');
+    }
+  };
+  const verifyPassword = (e) => {
+    if (e.target.value.length > 0 && e.target.value.length < 8) {
+      setPasswordMessage('Password is too short');
+      $('#passwordMessage').removeClass('text-success');
+      $('#passwordMessage').addClass('text-danger pt-2');
+      $('#passwordMessage').css('display', 'block');
+      $('#passwordMessageIcon').removeClass('fa-circle-check');
+      $('#passwordMessageIcon').addClass('fa-ban');
+    } else if (e.target.value.length === 0) {
+      setPasswordMessage('');
+      $('#passwordMessage').css('display', 'none');
+      $('#passwordMessage').removeClass('pt-2');
+      $('#passwordMessageIcon').removeClass('fa-circle-check fa-ban');
+    } else {
+      setPasswordMessage('Password Accepted');
+      $('#passwordMessage').removeClass('text-danger');
+      $('#passwordMessage').addClass('text-success pt-2');
+      $('#passwordMessageIcon').removeClass('fa-ban');
+      $('#passwordMessageIcon').addClass('fa-circle-check');
+    }
+  };
+  const confirmPassword = () => {
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    if (passwordConfirm !== password) {
+      setPasswordConfirmMessage('Passwords do not match');
+      $('#passwordConfirmMessage').removeClass('text-success');
+      $('#passwordConfirmMessage').addClass('text-danger pt-2');
+      $('#passwordConfirmMessage').css('display', 'block');
+      $('#passwordConfirmMessageIcon').removeClass('fa-circle-check');
+      $('#passwordConfirmMessageIcon').addClass('fa-ban');
+    } else if (password.length >= 8) {
+      setPasswordConfirmMessage('Password Accepted');
+      $('#passwordConfirmMessage').removeClass('text-danger');
+      $('#passwordConfirmMessage').addClass('text-success pt-2');
+      $('#passwordConfirmMessageIcon').removeClass('fa-ban');
+      $('#passwordConfirmMessageIcon').addClass('fa-circle-check');
+    }
+  };
   const { formForLogin } = props;
   return (
     <div className="App">
+      <div id="loginAlertPlaceHolder" />
       <div className="sidePanel" />
       <div className="loginPanel">
         {formForLogin && loginOrSignUp ? (
@@ -88,6 +193,7 @@ function LoginPage(props) {
               <Button
                 variant="link text-dark"
                 onClick={() => {
+                  document.getElementById('login-form').reset();
                   setLoginOrSignUp(!loginOrSignUp);
                 }}
               >
@@ -95,28 +201,51 @@ function LoginPage(props) {
               </Button>
               <Button type="submit" className="btn btn-dark px-4">Login</Button>
             </ButtonGroup>
-            <br />
           </form>
         ) : (
           <form onSubmit={submitForm} id="signup-form">
             <h2 className="mb-4 text-secondary">Sign Up</h2>
             <div className="form-group mb-3">
-              <input required id="email" type="email" autoComplete="off" className="form-control" placeholder="Enter Email Address" />
+              <input id="email" autoComplete="off" className="form-control" placeholder="Enter Email Address" onChange={verifyEmail} />
+              <span className="px-2 align-items-center pt-2 text-danger" id="emailMessage">
+                <i className="fa-solid pe-2 fa-ban" id="emailMessageIcon" />
+                <p className="m-0">{emailMessage}</p>
+              </span>
             </div>
             <div className="form-group mb-3">
-              <input required id="name" type="text" autoComplete="off" className="form-control" placeholder="Choose a Display Name" />
+              <input id="name" type="text" autoComplete="off" className="form-control" placeholder="Choose a Display Name" />
             </div>
             <div className="form-group mb-3">
-              <input required id="password" type="password" className="form-control" placeholder="Choose a Password" />
+              <input
+                id="password"
+                type="password"
+                className="form-control"
+                placeholder="Choose a Password"
+                onChange={(e) => {
+                  verifyPassword(e);
+                  confirmPassword();
+                }}
+              />
+              <span className="px-2 d-flex align-items-center" id="passwordMessage">
+                <i className="fa-solid pe-2" id="passwordMessageIcon" />
+                <p className="m-0">{passwordMessage}</p>
+              </span>
             </div>
             <div className="form-group mb-3">
-              <input required id="passwordConfirm" type="password" className="form-control" placeholder="Confirm Password" />
+              <input id="passwordConfirm" type="password" className="form-control" placeholder="Confirm Password" onChange={confirmPassword} />
+              <span className="px-2 d-flex align-items-center" id="passwordConfirmMessage">
+                <i className="fa-solid pe-2" id="passwordConfirmMessageIcon" />
+                <p className="m-0">{passwordConfirmMessage}</p>
+              </span>
             </div>
             <ButtonGroup className="mb-3">
               <Button
                 variant="link text-dark"
                 onClick={() => {
+                  document.getElementById('signup-form').reset();
                   setLoginOrSignUp(!loginOrSignUp);
+                  setPasswordMessage('');
+                  setPasswordConfirmMessage('');
                 }}
               >
                 Log In
@@ -131,7 +260,7 @@ function LoginPage(props) {
             onSuccess={loggedIn}
             width="300px"
             onError={() => {
-              console.log('Login Failed');
+              Alert('Login Failed', 'danger');
             }}
             text="continue_with"
           />
@@ -140,5 +269,9 @@ function LoginPage(props) {
     </div>
   );
 }
+
+LoginPage.propTypes = {
+  formForLogin: PropTypes.bool.isRequired,
+};
 
 export default LoginPage;

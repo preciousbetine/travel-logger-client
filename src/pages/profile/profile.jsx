@@ -130,20 +130,20 @@ function Profile(props) {
                         />
                       ),
                     )) : (
-                      <div className="text-center mt-5 text-secondary">
-                        <i className="fa-solid fa-file font-30" />
-                        <div>You have not shared any experiences yet.</div>
-                        <LinkContainer to="/new">
-                          <button type="button" className="btn bg-secondary text-light my-2">Share a New Experience</button>
-                        </LinkContainer>
-                      </div>
+                      <tr>
+                        <td>
+                          <div className="text-center mt-5 text-secondary">
+                            <i className="fa-solid fa-file font-30" />
+                            <div>You have not shared any experiences yet.</div>
+                            <LinkContainer to="/new">
+                              <button type="button" className="btn bg-secondary text-light my-2">Share a New Experience</button>
+                            </LinkContainer>
+                          </div>
+                        </td>
+                      </tr>
                     )
                   }
-                  <tr>
-                    <td>
-                      <span />
-                    </td>
-                  </tr>
+                  <tr />
                 </>
               )
                 : (
