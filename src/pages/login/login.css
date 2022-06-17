@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
 
 .App {
   width: 100vw;
@@ -5,6 +11,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.app-name {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  right: 20px;
+  top: 20px;
+  padding: 5px 20px;
+  border-radius: 10px;
+  font-family: 'Indie Flower';
+  font-weight: bold;
 }
 
 .loginPanel {
@@ -19,7 +39,11 @@
 #loginAlertPlaceHolder {
   position: fixed;
   top: 10px;
-  right: 10px;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
 #passwordMessage, #emailMessage, #passwordConfirmMessage {
@@ -29,7 +53,9 @@
 .sidePanel {
   height: 100vh;
   width: 40vw;
-  background: rgba(20, 20, 14, 0.8);
+  background-image: url(bckg.jfif);
+  opacity: 0.8;
+  background-size: cover;
 }
 
 .title-text {

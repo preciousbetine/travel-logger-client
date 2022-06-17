@@ -1,17 +1,19 @@
 .loader {
-  height: 100px;
+  height: 200px;
   width: 100%;
 }
 
-.rotate {
-  animation: rotation 1s infinite ease-in-out;
+.load {
+  border: 5px solid var(--bs-light); /* Light grey */
+  border-top: 5px solid var(--bs-dark); /* Blue */
+  border-right: 5px solid var(--bs-dark); /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 0.5s linear infinite;
 }
 
-@keyframes rotation {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(359deg);
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

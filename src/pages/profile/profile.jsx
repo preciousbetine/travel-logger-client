@@ -103,7 +103,7 @@ function Profile(props) {
         }
       </div>
       <div className="pb-3">
-        <table className="table table-striped">
+        <table className={`table ${experiences.length > 0 ? 'table-striped' : ''}`}>
           <thead className="">
             <tr>
               <th className="col ps-4">My Experiences</th>

@@ -44,6 +44,7 @@ function Search(props) {
   }, []);
 
   const onScroll = (e) => {
+    if (search.trim().length === 0) return;
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
       fetch(`http://localhost:5000/${id}/experiences?index=${currentIndex}`)
         .then((res) => res.json()).then((res) => {

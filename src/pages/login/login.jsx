@@ -178,6 +178,10 @@ function LoginPage(props) {
   return (
     <div className="App">
       <div id="loginAlertPlaceHolder" />
+      <div className="app-name">
+        <h1>Travel Log App</h1>
+        <p>Share Your Experiences with the world</p>
+      </div>
       <div className="sidePanel" />
       <div className="loginPanel">
         {formForLogin && loginOrSignUp ? (
