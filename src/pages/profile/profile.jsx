@@ -107,6 +107,13 @@ function Profile(props) {
         </div>
       </div>
       <div className="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="passwordUpdatedToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-success text-light">
+            Password Updated Successfully!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed bottom-0 end-0 p-3">
         <div id="errorToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div className="toast-body d-flex align-items-center bg-danger text-light">
             An Error Occured!

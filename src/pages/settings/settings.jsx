@@ -36,13 +36,10 @@ function AllSettings(props) {
       <LinkContainer to={editProfilePage}>
         <div className="settingItem">Edit Profile</div>
       </LinkContainer>
-      <LinkContainer to="/settings">
+      <LinkContainer to="/settings/updateCredentials">
         <div className="settingItem">Change Password</div>
       </LinkContainer>
       <div className="settingItem" role="button" onClick={logOut} onKeyPress={logOut} tabIndex="0">Log Out</div>
-      <LinkContainer to="/settings/">
-        <div className="settingItem">Delete Account</div>
-      </LinkContainer>
     </div>
   );
 }
@@ -106,10 +103,10 @@ export function EditProfile(props) {
         }, 1000);
         navigate('/profile');
       } else {
-        Alert('Profile update failed', 'warrning', 'settingsAlert', 'Error: ');
+        Alert('Profile update failed', 'warning', 'settingsAlert', 'Error ');
       }
     }).catch(() => {
-      Alert('Profile update failed', 'warrning', 'settingsAlert', 'Error: ');
+      Alert('Profile update failed', 'warning', 'settingsAlert', 'Error ');
     });
   };
 

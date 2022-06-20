@@ -15,6 +15,7 @@ import NewExperience from '../newExperience/newExperience';
 import AllSettings, { EditProfile } from '../settings/settings';
 import Alert from '../../components/Alert/Alert';
 import './dashboard.css';
+import UpdateCredentials from '../updateCredentials/updateCredentials';
 
 function SideBar() {
   const { pathname } = useLocation();
@@ -119,6 +120,7 @@ function Dashboard() {
             <Route path="/search/*" element={<Search setHeader={setHeader} />} />
             <Route path="/profile" element={<Profile setHeader={setHeader} />} />
             <Route path="/settings/editProfile" element={<EditProfile setHeader={setHeader} />} />
+            <Route path="/settings/updateCredentials" element={<UpdateCredentials setHeader={setHeader} />} />
             <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
           </Routes>
         </div>
