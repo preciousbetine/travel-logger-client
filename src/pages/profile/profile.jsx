@@ -24,11 +24,13 @@ function Profile(props) {
   );
   useEffect(() => {
     setHeader(nav);
+  }, []);
+  useEffect(() => {
     fetch(`http://localhost:5000/myExperiences?index=${currentIndex}`, {
       credentials: 'include',
     })
       .then((res) => res.json()).then((res) => {
-        setCurrentIndex(currentIndex + 10);
+        setCurrentIndex(10);
         addExperiences([...experiences, ...res.experiences]);
         setPostsLoaded(true);
       }).catch(() => {
@@ -65,7 +67,6 @@ function Profile(props) {
         addExperiences([...res.experiences]);
         const toast = new bootstrap.Toast(document.getElementById('deleteToast'));
         toast.show();
-        document.getElementById('profilePage').scrollTop = 0;
       }).catch(() => {
         myModal.hide();
         navigate('/login');
@@ -79,7 +80,7 @@ function Profile(props) {
           <div className="modal-content">
             <div className="modal-header bg-danger">
               <h5 className="modal-title text-white" id="deleteExperienceLabel">Delete this experience?</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body d-flex justify-content-between align-items-center">
               <span>This cannot be undone</span>
@@ -102,6 +103,13 @@ function Profile(props) {
         <div id="errorToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
           <div className="toast-body d-flex align-items-center bg-danger text-light">
             An Error Occured!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed w-100 bottom-0 start-0 p-3 d-flex justify-content-end">
+        <div id="postToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-dark text-light">
+            Experience Posted
           </div>
         </div>
       </div>

@@ -1,9 +1,0 @@
-.btn, .btn-close {
-  outline: none !important;
-  
-}
-
-.btn:focus, .btn-close:focus {
-  outline: none !important;
-  border: none !important;
-}

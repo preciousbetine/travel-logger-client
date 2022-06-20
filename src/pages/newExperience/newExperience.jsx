@@ -1,20 +1,20 @@
+/* global bootstrap */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import Alert from '../../components/Alert/Alert';
 import './newExperience.css';
 
-function NewExperienceFunction(props) {
-  const { setHeader } = props;
+function NewExperienceFunction() {
   const navigate = useNavigate();
   return (
-    <NewExperience navigate={navigate} setHeader={setHeader} />
+    <NewExperience navigate={navigate} />
   );
 }
 
 class NewExperience extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
-    this.setHeader = props.setHeader;
     this.state = {
       experienceName: '',
       description: '',
@@ -24,18 +24,6 @@ class NewExperience extends React.Component {
     this.addImages = this.addImages.bind(this);
     this.removeImage = this.removeImage.bind(this);
     this.makePost = this.makePost.bind(this);
-  }
-
-  componentDidMount() {
-    const headerComponent = (
-      <div className="d-flex text-dark justify-content-between align-items-center w-100">
-        <span>Log a New Experience</span>
-        <span>
-          <button className="btn btn-dark" type="button" onClick={this.makePost}>Post</button>
-        </span>
-      </div>
-    );
-    this.setHeader(headerComponent);
   }
 
   addImages() {
@@ -48,7 +36,7 @@ class NewExperience extends React.Component {
       const files = Array.from(input.files);
       if (FileReader && files && files.length) {
         if (files.length > 2) {
-          console.log('Max of 2 Images');
+          Alert('Please select a Maximum of 2 Images', 'danger', 'newExperienceAlert');
           return;
         }
         files.forEach((file, index) => {
@@ -74,6 +62,14 @@ class NewExperience extends React.Component {
 
   makePost() {
     const { navigate } = this.props;
+    const { description } = this.state;
+    if (description.trim() === '') {
+      Alert('Description Cannot Be Blank', 'warning', 'newExperienceAlert');
+      document.getElementById('description').focus();
+      return;
+    }
+    Alert('Posting Experience...', 'dark', 'postingExperienceAlert');
+
     fetch('http://localhost:5000/postExperience', {
       method: 'POST',
       credentials: 'include',
@@ -85,8 +81,12 @@ class NewExperience extends React.Component {
       if (!res.success) {
         console.log('Post Experience failed!');
       } else {
-        console.log('Experience Posted Successfully');
-        navigate('/profile');
+        window.newPostModal.hide();
+        navigate('/login');
+        setTimeout(() => {
+          const toast = new bootstrap.Toast(document.getElementById('postToast'));
+          toast.show();
+        }, 1000);
       }
     }).catch(() => {
       console.log('Post Experience failed!');
@@ -114,54 +114,103 @@ class NewExperience extends React.Component {
       images,
     } = this.state;
     return (
-      <div className="newExperience text-dark fw-bold">
+      <div className="newExperience fw-bold">
+        <div id="newExperienceAlert" />
+        <div id="postingExperienceAlert" />
         <form>
           <div className="row">
-            <label htmlFor="experienceName" className="col-md-6 col-sm-6 mb-2">
-              Label Your Experience
-              <input type="text" className="form-control mt-2" id="experienceName" value={experienceName} onChange={this.inputChanged} />
-            </label>
-            <label htmlFor="description" className="mb-2">
-              Describe Your Experience
-              {' '}
-              (
-              {250 - description.length}
-              {' '}
-              Words Left )
-              <textarea
-                rows={10}
-                className="form-control mt-2"
-                id="description"
-                value={description}
-                style={{ resize: 'none' }}
-                onChange={this.inputChanged}
-                maxLength="250"
-              />
-            </label>
+            <input type="text" autoComplete="off" className="mb-4 py-2 bg-dark text-white" id="experienceName" placeholder="Label Your Experience" value={experienceName} onChange={this.inputChanged} />
+            <textarea
+              rows={6}
+              className="py-2 bg-dark text-white"
+              id="description"
+              value={description}
+              style={{ resize: 'none' }}
+              onChange={this.inputChanged}
+              maxLength="250"
+              placeholder="Describe Your Experience..."
+            />
           </div>
-          <button
-            className="btn btn-dark mt-1"
-            type="button"
-            onClick={this.addImages}
-          >
-            <i className="fa fa-image me-2" />
-            Add Images
-          </button>
-          <div className="d-flex pt-3">
+          <div>
             {
-              images.map((image, index) => (
-                <div key={image} className="position-relative">
+              images.length ? (
+                <div className="">
+                  {
+                    (images.length === 1) ? (
+                      <div id="oneImageHolder">
+                        <button
+                          type="button"
+                          className="position-absolute btn btn-close removeImageButton"
+                          onClick={() => { this.removeImage(0); }}
+                          aria-label="Close"
+                        />
+                        <img src={images[0]} alt="" id="new-post-image" />
+                      </div>
+                    ) : (
+                      <div id="twoImagesHolder">
+                        <div id="two-pics-image-1">
+                          <button
+                            type="button"
+                            className="position-absolute btn btn-close removeImageButton1"
+                            onClick={() => { this.removeImage(0); }}
+                            aria-label="Close"
+                          />
+                          <img src={images[0]} alt="" id="new-post-image-1" />
+                        </div>
+                        <div id="two-pics-image-2">
+                          <button
+                            type="button"
+                            className="position-absolute btn btn-close removeImageButton"
+                            onClick={() => { this.removeImage(1); }}
+                            aria-label="Close"
+                          />
+                          <img src={images[1]} alt="" id="new-post-image-2" />
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+              ) : null
+            }
+          </div>
+          {/*
+          {images.length ? (
+            <div className="postImageDiv d-flex">
+              <div className="position-relative">
+                <button
+                  type="button"
+                  className="position-absolute btn btn-close end-0 font-10 removeImageButton"
+                  onClick={() => { this.removeImage(0); }}
+                  aria-label="Close"
+                />
+                <img src={images[0]} alt="" className={`postImage ${images.length > 1 ? 'post
+                -image-3' : 'post-image-5'}`} />
+              </div>
+              { images.length > 1 ? (
+                <div className="position-relative">
                   <button
                     type="button"
-                    className="position-absolute btn btn-light end-0 font-10"
-                    onClick={() => { this.removeImage(index); }}
-                  >
-                    Remove
-                  </button>
-                  <img src={image} alt="" className="postImage" />
+                    className="position-absolute btn btn-close end-0 font-10 removeImageButton"
+                    onClick={() => { this.removeImage(1); }}
+                    aria-label="Close"
+                  />
+                  <img src={images[1]} alt="" className="postImage post-image-4" />
                 </div>
-              ))
-            }
+
+              ) : null }
+            </div>
+          ) : null } */}
+
+          <div className="d-flex justify-content-between mt-4" id="postControl">
+            <button
+              className="btn btn-dark border-white me-3"
+              type="button"
+              title="Add Images"
+              onClick={this.addImages}
+            >
+              <i className="fa fa-image" />
+            </button>
+            <button className="btn btn-light" type="button" onClick={this.makePost}>Post</button>
           </div>
         </form>
       </div>
@@ -170,12 +219,7 @@ class NewExperience extends React.Component {
 }
 
 NewExperience.propTypes = {
-  setHeader: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
-};
-
-NewExperienceFunction.propTypes = {
-  setHeader: PropTypes.func.isRequired,
 };
 
 export default NewExperienceFunction;

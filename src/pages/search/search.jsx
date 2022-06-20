@@ -111,7 +111,7 @@ function Search(props) {
             }
           </div>
           <div className="pb-3 mt-2">
-            <table className="table table-striped">
+            <table className={`table ${experiences.length > 0 ? 'table-striped' : 'table-borderless'}`}>
               <thead className="bg-light text-dark">
                 <tr>
                   <th className="col ps-4">Experiences</th>
@@ -136,10 +136,12 @@ function Search(props) {
                           ),
                         )
                       ) : (
-                        <div className="text-center mt-5 text-secondary">
-                          <i className="fa-solid fa-file font-30" />
-                          <div>This user has not posted any experiences yet.</div>
-                        </div>
+                        <tr>
+                          <td className="text-center mt-5 text-secondary py-5">
+                            <i className="fa-solid fa-file font-30" />
+                            <div>This user has not posted any experiences yet.</div>
+                          </td>
+                        </tr>
                       )
                     }
                   </tbody>

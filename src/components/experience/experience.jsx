@@ -13,7 +13,7 @@ function Experience(props) {
   } = props;
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
-  const dateString = `${date.getDay()} 
+  const dateString = `${date.getDate()} 
                       ${months[date.getMonth()]}
                       ${date.getFullYear()}, 
                       ${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 })}:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 })}`;
@@ -35,10 +35,14 @@ function Experience(props) {
           }
         </div>
         <div className="mx-3 mb-2 p-3 py-1">
-          { experienceName }
-          {'  '}
-          ----
-          {'  '}
+          { experienceName ? (
+            <strong>
+              {experienceName}
+              {' '}
+              :
+              {' '}
+            </strong>
+          ) : null }
           { description }
         </div>
         {images.length ? (

@@ -121,7 +121,7 @@
     margin-right: 20px;
   }
 
-  .profilePage, .settingsPage, .newExperience {
+  .profilePage, .settingsPage {
     height: calc(100vh - 150px);
   }
 }

@@ -1,3 +1,4 @@
+/* global bootstrap */
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import {
@@ -29,15 +30,18 @@ function SideBar() {
             <i className="fa-solid fa-magnifying-glass font-30" />
           </button>
         </LinkContainer>
-        <LinkContainer to="/new">
-          <button
-            title="New Experience"
-            type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/new' ? 'text-light bg-dark' : ''}`}
-          >
-            <i className="fa-solid fa-circle-plus font-30" />
-          </button>
-        </LinkContainer>
+        <button
+          title="New Experience"
+          type="button"
+          className={`btn mt-3 sideBarItem ${pathname === '/new' ? 'text-light bg-dark' : ''}`}
+          onClick={() => {
+            const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
+            window.newPostModal = modal;
+            modal.show();
+          }}
+        >
+          <i className="fa-solid fa-circle-plus font-30" />
+        </button>
       </div>
       <div className="bottom-section d-flex pb-2">
         <LinkContainer to="/profile">
@@ -91,6 +95,19 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <SideBar />
+      <div className="modal fade" id="newPostModal" tabIndex="-1" aria-labelledby="postExperienceLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
+          <div className="modal-content">
+            <div className="modal-header bg-dark text-light">
+              <h5 className="modal-title" id="postExperienceLabel">Post A New Experience</h5>
+              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" />
+            </div>
+            <div className="modal-body bg-dark text-light">
+              <NewExperience />
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="dashboardAlertPlaceHolder" />
       <div className="mainPage">
         <div className="page-header d-flex align-items-center px-3 font-20">
@@ -101,7 +118,6 @@ function Dashboard() {
             <Route path="/search" element={<Search setHeader={setHeader} />} />
             <Route path="/search/*" element={<Search setHeader={setHeader} />} />
             <Route path="/profile" element={<Profile setHeader={setHeader} />} />
-            <Route path="/new" element={<NewExperience setHeader={setHeader} />} />
             <Route path="/settings/editProfile" element={<EditProfile setHeader={setHeader} />} />
             <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
           </Routes>

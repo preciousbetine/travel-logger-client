@@ -1,11 +1,11 @@
 /* global $ */
-const Alert = (message, type, container) => {
+const Alert = (message, type, container, heading) => {
   const alertPlaceholder = document.getElementById(container);
   alertPlaceholder.innerText = '';
   const wrapper = document.createElement('div');
   wrapper.innerHTML = `
     <div id="alert" class="alert alert-${type} alert-dismissible fade show" role="alert">
-    <strong>Error: </strong>
+    <strong>${heading ? `${heading}: ` : ''}</strong>
     ${message}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"/>
     </div>`;
