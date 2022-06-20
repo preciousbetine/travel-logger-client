@@ -13,6 +13,19 @@ code {
     monospace;
 }
 
+.font-15 {
+  font-size: 15px;
+}
+.font-20 {
+  font-size: 20px;
+}
+.font-25 {
+  font-size: 25px;
+}
+.font-30 {
+  font-size: 30px;
+}
+
 .btn:focus, .btn-close:focus {
   outline: none !important;
   border: none !important;
