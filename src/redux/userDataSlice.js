@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -13,8 +14,8 @@ export const fetchUserData = createAsyncThunk(
       credentials: 'include',
     }).then((res) => res.json()).then(async (res) => {
       userData = res;
-    }).catch((err) => {
-      console.log('An Error Occured', err);
+    }).catch(() => {
+      location.reload();
     });
     return userData;
   },

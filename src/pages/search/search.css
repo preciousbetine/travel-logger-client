@@ -7,6 +7,14 @@
   overflow-y: auto;
 }
 
+#searchAlert {
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 50vw;
+  transform: translateX(-50%);
+}
+
 @media only screen and (max-width: 550px) {
   .searchPage {
     height: calc(100vh - 150px);

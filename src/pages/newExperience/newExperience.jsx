@@ -36,7 +36,7 @@ class NewExperience extends React.Component {
       const files = Array.from(input.files);
       if (FileReader && files && files.length) {
         if (files.length > 2) {
-          Alert('Please select a Maximum of 2 Images', 'danger', 'newExperienceAlert');
+          Alert('Please select a Maximum of 2 Images', 'danger', 'newExperienceAlert', 'Maximum Images Exceeded');
           return;
         }
         files.forEach((file, index) => {
@@ -79,7 +79,7 @@ class NewExperience extends React.Component {
       body: JSON.stringify(this.state),
     }).then((res) => res.json()).then((res) => {
       if (!res.success) {
-        console.log('Post Experience failed!');
+        Alert('Post Experience Failed', 'danger', 'newExperienceAlert', 'Error ');
       } else {
         window.newPostModal.hide();
         navigate('/login');
@@ -89,7 +89,7 @@ class NewExperience extends React.Component {
         }, 1000);
       }
     }).catch(() => {
-      console.log('Post Experience failed!');
+      Alert('Post Experience Failed', 'danger', 'newExperienceAlert', 'Error ');
     });
   }
 
@@ -119,7 +119,7 @@ class NewExperience extends React.Component {
         <div id="postingExperienceAlert" />
         <form>
           <div className="row">
-            <input type="text" autoComplete="off" className="mb-4 py-2 bg-dark text-white" id="experienceName" placeholder="Label Your Experience" value={experienceName} onChange={this.inputChanged} />
+            <input type="text" autoComplete="off" className="mb-4 py-2 bg-dark text-white" id="experienceName" placeholder="Label Your Experience (Optional)" value={experienceName} onChange={this.inputChanged} />
             <textarea
               rows={6}
               className="py-2 bg-dark text-white"
@@ -173,34 +173,6 @@ class NewExperience extends React.Component {
               ) : null
             }
           </div>
-          {/*
-          {images.length ? (
-            <div className="postImageDiv d-flex">
-              <div className="position-relative">
-                <button
-                  type="button"
-                  className="position-absolute btn btn-close end-0 font-10 removeImageButton"
-                  onClick={() => { this.removeImage(0); }}
-                  aria-label="Close"
-                />
-                <img src={images[0]} alt="" className={`postImage ${images.length > 1 ? 'post
-                -image-3' : 'post-image-5'}`} />
-              </div>
-              { images.length > 1 ? (
-                <div className="position-relative">
-                  <button
-                    type="button"
-                    className="position-absolute btn btn-close end-0 font-10 removeImageButton"
-                    onClick={() => { this.removeImage(1); }}
-                    aria-label="Close"
-                  />
-                  <img src={images[1]} alt="" className="postImage post-image-4" />
-                </div>
-
-              ) : null }
-            </div>
-          ) : null } */}
-
           <div className="d-flex justify-content-between mt-4" id="postControl">
             <button
               className="btn btn-dark border-white me-3"
@@ -210,7 +182,7 @@ class NewExperience extends React.Component {
             >
               <i className="fa fa-image" />
             </button>
-            <button className="btn btn-light" type="button" onClick={this.makePost}>Post</button>
+            <button className="btn btn-light" type="button" title="Post Experience" onClick={this.makePost}>Post</button>
           </div>
         </form>
       </div>

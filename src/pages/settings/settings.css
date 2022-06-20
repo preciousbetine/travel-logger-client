@@ -25,3 +25,11 @@
   border-radius: 20px;
   object-fit: cover;
 }
+
+#settingsAlert {
+  position: fixed;
+  z-index: 2;
+  top: 10px;
+  left: 50vw;
+  transform: translateX(-50%);
+}

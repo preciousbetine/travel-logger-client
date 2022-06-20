@@ -1,3 +1,4 @@
+/* global bootstrap */
 import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +8,7 @@ import Cookies from 'js-cookie';
 import { setNewUser, setLoggedInState } from '../../redux/loginSlice';
 import { userData, fetchUserData, clearUser } from '../../redux/userDataSlice';
 import './settings.css';
+import Alert from '../../components/Alert/Alert';
 
 function AllSettings(props) {
   const dispatch = useDispatch();
@@ -98,12 +100,16 @@ export function EditProfile(props) {
     }).then((res) => res.json()).then(async (res) => {
       if (res.success) {
         await dispatch(fetchUserData());
+        setTimeout(() => {
+          const toast = new bootstrap.Toast(document.getElementById('profileUpdatedToast'));
+          toast.show();
+        }, 1000);
         navigate('/profile');
       } else {
-        console.log('Update User Failed');
+        Alert('Profile update failed', 'warrning', 'settingsAlert', 'Error: ');
       }
     }).catch(() => {
-      console.log('Update User Failed');
+      Alert('Profile update failed', 'warrning', 'settingsAlert', 'Error: ');
     });
   };
 
@@ -157,6 +163,7 @@ export function EditProfile(props) {
   };
   return (
     <div className="settingsPage">
+      <div id="settingsAlert" />
       <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
         <label htmlFor="profilePic" className="text-dark w-100">
           Profile Picture

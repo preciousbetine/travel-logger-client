@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
 import Loader from '../../components/loader/loader';
 import './search.css';
+import Alert from '../../components/Alert/Alert';
 
 function Search(props) {
   const { setHeader } = props;
@@ -25,7 +26,6 @@ function Search(props) {
       let res = await fetch(`http://localhost:5000/user/${id}`);
       res = await res.json();
       setUser(res);
-      console.log(currentIndex);
 
       res = await fetch(`http://localhost:5000/${id}/experiences?index=${0}`);
       res = await res.json();
@@ -55,8 +55,8 @@ function Search(props) {
             setCurrentIndex(currentIndex + 10);
             addExperiences([...experiences, ...res.experiences]);
           }
-        }).catch((err) => {
-          console.log('Fetch experiences failed', err);
+        }).catch(() => {
+          Alert('An Error Occured! Reload the page', 'danger', 'searchAlert');
         });
     }
   };
@@ -75,6 +75,7 @@ function Search(props) {
 
   return (
     <div className="searchPage" onScroll={onScroll}>
+      <div id="searchAlert" />
       {id ? (
         <>
           <div className="profileDiv border border-2 rounded-3">
@@ -158,6 +159,7 @@ function Search(props) {
               searchResults.map(
                 (result, index) => (
                   <div
+                    key={result.id}
                     onClick={() => showUserProfile(result.id)}
                     role="button"
                     tabIndex={index + 40}
