@@ -70,7 +70,7 @@ class NewExperience extends React.Component {
     }
     Alert('Posting Experience...', 'dark', 'postingExperienceAlert');
 
-    fetch('http://localhost:5000/postExperience', {
+    fetch(`${window.server}/postExperience`, {
       method: 'POST',
       credentials: 'include',
       headers: {

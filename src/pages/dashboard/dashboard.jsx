@@ -78,7 +78,7 @@ function Dashboard() {
     if (newUser) {
       navigate('/settings/editProfile');
     } else if (location.pathname === '/') navigate('/profile');
-    fetch('http://localhost:5000/randomUsers', {
+    fetch(`${window.server}/randomUsers`, {
       credentials: 'include',
     })
       .then((res) => res.json()).then((res) => {
@@ -139,7 +139,7 @@ function Dashboard() {
                 <img
                   alt=""
                   className="smallImg me-3 border border-light"
-                  src={`http://localhost:5000/photo/${user.picture}`}
+                  src={`${window.server}/photo/${user.picture}`}
                 />
               </span>
               <span className="d-flex flex-column align-items-start">

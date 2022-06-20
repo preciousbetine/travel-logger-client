@@ -4,7 +4,6 @@ import './index.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import store from './redux/store';
 import { checkLoggedInState } from './redux/loginSlice';
 import { fetchUserData } from './redux/userDataSlice';
@@ -22,4 +21,5 @@ const start = async () => {
   );
 };
 
+window.server = 'http://localhost:5000';
 start();

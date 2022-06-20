@@ -9,7 +9,7 @@ export const checkLoggedInState = createAsyncThunk(
   'login/fetchDetails',
   async () => {
     let loggedIn = false;
-    await fetch('http://localhost:5000/userLogin', {
+    await fetch(`${window.server}/userLogin`, {
       credentials: 'include',
     }).then((res) => res.json()).then((res) => {
       if (!res.error) {

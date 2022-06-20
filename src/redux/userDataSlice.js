@@ -10,7 +10,7 @@ export const fetchUserData = createAsyncThunk(
   'user/fetchData',
   async () => {
     let userData = null;
-    await fetch('http://localhost:5000/myFullInfo', {
+    await fetch(`${window.server}/myFullInfo`, {
       credentials: 'include',
     }).then((res) => res.json()).then(async (res) => {
       userData = res;

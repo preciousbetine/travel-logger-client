@@ -20,13 +20,13 @@ function LoginPage(props) {
 
   const loggedIn = ({ credential }) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:5000/tokensignin');
+    xhr.open('POST', `${window.server}/tokensignin`);
     xhr.withCredentials = true;
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onload = () => {
       if (xhr.responseText === 'success') {
-        fetch('http://localhost:5000/userLogin', {
+        fetch(`${window.server}/userLogin`, {
           credentials: 'include',
         }).then((res) => res.json()).then(async (res) => {
           if (res.error) {
@@ -94,7 +94,7 @@ function LoginPage(props) {
       endPoint = 'emailSignUp';
       bodyObject.name = e.target.name.value;
     }
-    fetch(`http://localhost:5000/${endPoint}`, {
+    fetch(`${window.server}/${endPoint}`, {
       method: 'POST',
       credentials: 'include',
       headers: {

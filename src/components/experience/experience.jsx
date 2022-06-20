@@ -49,12 +49,12 @@ function Experience(props) {
           <div>
             { (images.length > 1) ? (
               <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image-1" alt="" src={`http://localhost:5000/photo/${images[0]}`} />
-                <img className="post-image-2" alt="" src={`http://localhost:5000/photo/${images[1]}`} />
+                <img className="post-image-1" alt="" src={`${window.server}/photo/${images[0]}`} />
+                <img className="post-image-2" alt="" src={`${window.server}/photo/${images[1]}`} />
               </div>
             ) : (
               <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image" alt="" src={`http://localhost:5000/photo/${images[0]}`} />
+                <img className="post-image" alt="" src={`${window.server}/photo/${images[0]}`} />
               </div>
             )}
           </div>

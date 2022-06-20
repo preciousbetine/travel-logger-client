@@ -26,7 +26,7 @@ function Profile(props) {
     setHeader(nav);
   }, []);
   useEffect(() => {
-    fetch(`http://localhost:5000/myExperiences?index=${currentIndex}`, {
+    fetch(`${window.server}/myExperiences?index=${currentIndex}`, {
       credentials: 'include',
     })
       .then((res) => res.json()).then((res) => {
@@ -41,7 +41,7 @@ function Profile(props) {
 
   const onScroll = (e) => {
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
-      fetch(`http://localhost:5000/myExperiences?index=${currentIndex}`, {
+      fetch(`${window.server}/myExperiences?index=${currentIndex}`, {
         credentials: 'include',
       })
         .then((res) => res.json()).then((res) => {
@@ -57,7 +57,7 @@ function Profile(props) {
   };
 
   const deleteExperience = () => {
-    fetch(`http://localhost:5000/experience/${experienceToDelete}`, {
+    fetch(`${window.server}/experience/${experienceToDelete}`, {
       credentials: 'include',
       method: 'DELETE',
     })
@@ -115,7 +115,7 @@ function Profile(props) {
       </div>
       <div className="toast-container position-fixed w-100 bottom-0 start-0 p-3 d-flex justify-content-end">
         <div id="postToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-dark text-light">
+          <div className="toast-body d-flex align-items-center bg-success text-light">
             Experience Posted
           </div>
         </div>
@@ -125,7 +125,7 @@ function Profile(props) {
           user.ready ? (
             <>
               <img
-                src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                src={user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
                 alt=""
                 className="userImage"
               />
@@ -194,9 +194,17 @@ function Profile(props) {
                           <div className="text-center mt-5 text-secondary">
                             <i className="fa-solid fa-file font-30" />
                             <div>You have not shared any experiences yet.</div>
-                            <LinkContainer to="/new">
-                              <button type="button" className="btn bg-secondary text-light my-2">Share a New Experience</button>
-                            </LinkContainer>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
+                                window.newPostModal = modal;
+                                modal.show();
+                              }}
+                              className="btn bg-secondary text-light my-2"
+                            >
+                              Share a New Experience
+                            </button>
                           </div>
                         </td>
                       </tr>

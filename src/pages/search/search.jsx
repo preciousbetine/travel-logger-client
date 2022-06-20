@@ -23,11 +23,11 @@ function Search(props) {
 
   useEffect(() => {
     async function work() {
-      let res = await fetch(`http://localhost:5000/user/${id}`);
+      let res = await fetch(`${window.server}/user/${id}`);
       res = await res.json();
       setUser(res);
 
-      res = await fetch(`http://localhost:5000/${id}/experiences?index=${0}`);
+      res = await fetch(`${window.server}/${id}/experiences?index=${0}`);
       res = await res.json();
       if (res.experiences.length) {
         setCurrentIndex(10);
@@ -49,7 +49,7 @@ function Search(props) {
   const onScroll = (e) => {
     if (search.trim().length === 0) return;
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
-      fetch(`http://localhost:5000/${id}/experiences?index=${currentIndex}`)
+      fetch(`${window.server}/${id}/experiences?index=${currentIndex}`)
         .then((res) => res.json()).then((res) => {
           if (res.experiences.length > 0) {
             setCurrentIndex(currentIndex + 10);
@@ -63,7 +63,7 @@ function Search(props) {
 
   const searchDatabase = async (e) => {
     if (e.target.value.trim().length === 0) { setSearchResults([]); } else {
-      let result = await fetch(`http://localhost:5000/searchUser/${e.target.value.trim()}`);
+      let result = await fetch(`${window.server}/searchUser/${e.target.value.trim()}`);
       result = await result.json();
       setSearchResults(result.users);
     }
@@ -83,7 +83,7 @@ function Search(props) {
               pageReady ? (
                 <>
                   <img
-                    src={user.picture ? `http://localhost:5000/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                    src={user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
                     alt=""
                     className="userImage"
                   />
@@ -170,7 +170,7 @@ function Search(props) {
                       <img
                         alt=""
                         className="smallImg me-3 border border-light"
-                        src={`http://localhost:5000/photo/${result.picture}`}
+                        src={`${window.server}/photo/${result.picture}`}
                       />
                     </span>
                     <span className="d-flex flex-column align-items-start">
