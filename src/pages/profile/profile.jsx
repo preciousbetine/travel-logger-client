@@ -8,6 +8,7 @@ import { userData } from '../../redux/userDataSlice';
 import Experience from '../../components/experience/experience';
 import Loader from '../../components/loader/loader';
 import './profile.css';
+import { serverAddress } from '../../redux/loginSlice';
 
 function Profile(props) {
   const { setHeader } = props;
@@ -18,6 +19,7 @@ function Profile(props) {
   const [experienceToDelete, setExperienceToDelete] = useState('');
   const user = useSelector(userData);
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
 
   const nav = (
     <Link to="/profile" className="text-dark text-decoration-none">My Profile</Link>
@@ -26,7 +28,7 @@ function Profile(props) {
     setHeader(nav);
   }, []);
   useEffect(() => {
-    fetch(`${window.server}/myExperiences?index=${currentIndex}`, {
+    fetch(`${server}/myExperiences?index=${currentIndex}`, {
       credentials: 'include',
     })
       .then((res) => res.json()).then((res) => {
@@ -41,7 +43,7 @@ function Profile(props) {
 
   const onScroll = (e) => {
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
-      fetch(`${window.server}/myExperiences?index=${currentIndex}`, {
+      fetch(`${server}/myExperiences?index=${currentIndex}`, {
         credentials: 'include',
       })
         .then((res) => res.json()).then((res) => {
@@ -57,7 +59,7 @@ function Profile(props) {
   };
 
   const deleteExperience = () => {
-    fetch(`${window.server}/experience/${experienceToDelete}`, {
+    fetch(`${server}/experience/${experienceToDelete}`, {
       credentials: 'include',
       method: 'DELETE',
     })
@@ -132,7 +134,7 @@ function Profile(props) {
           user.ready ? (
             <>
               <img
-                src={user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
                 alt=""
                 className="userImage"
               />

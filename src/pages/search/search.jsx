@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
 import Loader from '../../components/loader/loader';
 import './search.css';
 import Alert from '../../components/Alert/Alert';
+import { serverAddress } from '../../redux/loginSlice';
 
 function Search(props) {
   const { setHeader } = props;
@@ -16,6 +18,7 @@ function Search(props) {
   const [pageReady, setPageReady] = useState(false);
   const id = new URLSearchParams(search).get('id');
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
 
   const nav = (
     <Link to="/search" className="text-dark text-decoration-none">Find Other Travellers</Link>
@@ -23,11 +26,11 @@ function Search(props) {
 
   useEffect(() => {
     async function work() {
-      let res = await fetch(`${window.server}/user/${id}`);
+      let res = await fetch(`${server}/user/${id}`);
       res = await res.json();
       setUser(res);
 
-      res = await fetch(`${window.server}/${id}/experiences?index=${0}`);
+      res = await fetch(`${server}/${id}/experiences?index=${0}`);
       res = await res.json();
       if (res.experiences.length) {
         setCurrentIndex(10);
@@ -49,7 +52,7 @@ function Search(props) {
   const onScroll = (e) => {
     if (search.trim().length === 0) return;
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
-      fetch(`${window.server}/${id}/experiences?index=${currentIndex}`)
+      fetch(`${server}/${id}/experiences?index=${currentIndex}`)
         .then((res) => res.json()).then((res) => {
           if (res.experiences.length > 0) {
             setCurrentIndex(currentIndex + 10);
@@ -63,7 +66,7 @@ function Search(props) {
 
   const searchDatabase = async (e) => {
     if (e.target.value.trim().length === 0) { setSearchResults([]); } else {
-      let result = await fetch(`${window.server}/searchUser/${e.target.value.trim()}`);
+      let result = await fetch(`${server}/searchUser/${e.target.value.trim()}`);
       result = await result.json();
       setSearchResults(result.users);
     }
@@ -83,7 +86,7 @@ function Search(props) {
               pageReady ? (
                 <>
                   <img
-                    src={user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                    src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
                     alt=""
                     className="userImage"
                   />
@@ -170,7 +173,7 @@ function Search(props) {
                       <img
                         alt=""
                         className="smallImg me-3 border border-light"
-                        src={`${window.server}/photo/${result.picture}`}
+                        src={`${server}/photo/${result.picture}`}
                       />
                     </span>
                     <span className="d-flex flex-column align-items-start">

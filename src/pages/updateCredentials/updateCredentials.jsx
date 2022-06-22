@@ -1,12 +1,15 @@
 /* global $, bootstrap */
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import Alert from '../../components/Alert/Alert';
+import { serverAddress } from '../../redux/loginSlice';
 
 export default function UpdateCredentials(props) {
   const { setHeader } = props;
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
   const [newPassword, setNewUserPassword] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
@@ -34,7 +37,7 @@ export default function UpdateCredentials(props) {
     const newCredentials = {
       newPassword,
     };
-    fetch(`${window.server}/updateUserCredentials`, {
+    fetch(`${server}/updateUserCredentials`, {
       method: 'POST',
       credentials: 'include',
       headers: {

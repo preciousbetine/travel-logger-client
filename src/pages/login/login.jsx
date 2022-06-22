@@ -4,15 +4,16 @@ import React, { useState } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setLoggedInState, setNewUser } from '../../redux/loginSlice';
+import { setLoggedInState, setNewUser, serverAddress } from '../../redux/loginSlice';
 import { fetchUserData } from '../../redux/userDataSlice';
 import Alert from '../../components/Alert/Alert';
 
 function LoginPage(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
   const [loginOrSignUp, setLoginOrSignUp] = useState(true);
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordConfirmMessage, setPasswordConfirmMessage] = useState('');
@@ -20,13 +21,13 @@ function LoginPage(props) {
 
   const loggedIn = ({ credential }) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${window.server}/tokensignin`);
+    xhr.open('POST', `${server}/tokensignin`);
     xhr.withCredentials = true;
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.onload = () => {
       if (xhr.responseText === 'success') {
-        fetch(`${window.server}/userLogin`, {
+        fetch(`${server}/userLogin`, {
           credentials: 'include',
         }).then((res) => res.json()).then(async (res) => {
           if (res.error) {
@@ -94,7 +95,7 @@ function LoginPage(props) {
       endPoint = 'emailSignUp';
       bodyObject.name = e.target.name.value;
     }
-    fetch(`${window.server}/${endPoint}`, {
+    fetch(`${server}/${endPoint}`, {
       method: 'POST',
       credentials: 'include',
       headers: {

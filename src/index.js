@@ -5,10 +5,14 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './redux/store';
-import { checkLoggedInState } from './redux/loginSlice';
+import { checkLoggedInState, setServerAddress } from './redux/loginSlice';
 import { fetchUserData } from './redux/userDataSlice';
 
+// Server Address is set in three places
+// Here, loginSlice.js and userDataSlice.js
+
 const start = async () => {
+  await store.dispatch(setServerAddress('http://localhost:5000'));
   await store.dispatch(checkLoggedInState());
   if (store.getState().login.loggedIn) await store.dispatch(fetchUserData());
   const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -21,5 +25,4 @@ const start = async () => {
   );
 };
 
-window.server = 'http://localhost:5000';
 start();

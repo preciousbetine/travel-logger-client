@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+const server = 'http://localhost:5000';
 const initialState = {
   ready: false,
 };
@@ -10,7 +11,7 @@ export const fetchUserData = createAsyncThunk(
   'user/fetchData',
   async () => {
     let userData = null;
-    await fetch(`${window.server}/myFullInfo`, {
+    await fetch(`${server}/myFullInfo`, {
       credentials: 'include',
     }).then((res) => res.json()).then(async (res) => {
       userData = res;

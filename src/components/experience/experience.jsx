@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+import { serverAddress } from '../../redux/loginSlice';
+
 import './experience.css';
 
 function Experience(props) {
@@ -11,6 +14,7 @@ function Experience(props) {
     deleteExperience,
     showDeleteOption,
   } = props;
+  const server = useSelector(serverAddress);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
   const dateString = `${date.getDate()} 
@@ -49,12 +53,12 @@ function Experience(props) {
           <div>
             { (images.length > 1) ? (
               <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image-1" alt="" src={`${window.server}/photo/${images[0]}`} />
-                <img className="post-image-2" alt="" src={`${window.server}/photo/${images[1]}`} />
+                <img className="post-image-1" alt="" src={`${server}/photo/${images[0]}`} />
+                <img className="post-image-2" alt="" src={`${server}/photo/${images[1]}`} />
               </div>
             ) : (
               <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image" alt="" src={`${window.server}/photo/${images[0]}`} />
+                <img className="post-image" alt="" src={`${server}/photo/${images[0]}`} />
               </div>
             )}
           </div>

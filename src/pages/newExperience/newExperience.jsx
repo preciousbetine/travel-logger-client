@@ -2,13 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Alert from '../../components/Alert/Alert';
 import './newExperience.css';
+import { serverAddress } from '../../redux/loginSlice';
 
 function NewExperienceFunction() {
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
   return (
-    <NewExperience navigate={navigate} />
+    <NewExperience navigate={navigate} server={server} />
   );
 }
 
@@ -61,7 +64,7 @@ class NewExperience extends React.Component {
   }
 
   makePost() {
-    const { navigate } = this.props;
+    const { navigate, server } = this.props;
     const { description } = this.state;
     if (description.trim() === '') {
       Alert('Description Cannot Be Blank', 'warning', 'newExperienceAlert');
@@ -70,7 +73,7 @@ class NewExperience extends React.Component {
     }
     Alert('Posting Experience...', 'dark', 'postingExperienceAlert');
 
-    fetch(`${window.server}/postExperience`, {
+    fetch(`${server}/postExperience`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -192,6 +195,7 @@ class NewExperience extends React.Component {
 
 NewExperience.propTypes = {
   navigate: PropTypes.func.isRequired,
+  server: PropTypes.string.isRequired,
 };
 
 export default NewExperienceFunction;

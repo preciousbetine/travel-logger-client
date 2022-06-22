@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { isNewUser } from '../../redux/loginSlice';
+import { isNewUser, serverAddress } from '../../redux/loginSlice';
 import Search from '../search/search';
 import Profile from '../profile/profile';
 import NewExperience from '../newExperience/newExperience';
@@ -72,6 +72,7 @@ function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
   const newUser = useSelector(isNewUser);
+  const server = useSelector(serverAddress);
   const [header, setHeader] = useState('');
   const [randomUsers, setRandomUsers] = useState([]);
 
@@ -79,7 +80,7 @@ function Dashboard() {
     if (newUser) {
       navigate('/settings/editProfile');
     } else if (location.pathname === '/') navigate('/profile');
-    fetch(`${window.server}/randomUsers`, {
+    fetch(`${server}/randomUsers`, {
       credentials: 'include',
     })
       .then((res) => res.json()).then((res) => {
@@ -141,7 +142,7 @@ function Dashboard() {
                 <img
                   alt=""
                   className="smallImg me-3 border border-light"
-                  src={`${window.server}/photo/${user.picture}`}
+                  src={`${server}/photo/${user.picture}`}
                 />
               </span>
               <span className="d-flex flex-column align-items-start">

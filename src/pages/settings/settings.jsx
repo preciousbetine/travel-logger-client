@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
-import { setNewUser, setLoggedInState } from '../../redux/loginSlice';
+import { setNewUser, setLoggedInState, serverAddress } from '../../redux/loginSlice';
 import { userData, fetchUserData, clearUser } from '../../redux/userDataSlice';
 import './settings.css';
 import Alert from '../../components/Alert/Alert';
@@ -52,13 +52,14 @@ export function EditProfile(props) {
   const { setHeader } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
   const user = useSelector(userData);
   const [newUserName, setNewUserName] = useState('');
   const [newUserLocation, setNewUserLocation] = useState('');
   const [newUserWebsite, setNewUserWebsite] = useState('');
   const [newUserBio, setNewUserBio] = useState('');
   const [imageInfo, setImageInfo] = useState('Max File Size is 3MB');
-  const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+  const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
 
   const nav = (
     <>
@@ -86,8 +87,8 @@ export function EditProfile(props) {
       profilePicSrc,
       email: user.email,
     };
-    if (profilePicSrc === `${window.server}/photo/${user.picture}`) newProfileInfo.profilePicSrc = null;
-    fetch(`${window.server}/updateUserInfo`, {
+    if (profilePicSrc === `${server}/photo/${user.picture}`) newProfileInfo.profilePicSrc = null;
+    fetch(`${server}/updateUserInfo`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -124,14 +125,14 @@ export function EditProfile(props) {
             setImageInfo('Image Upload Successful');
           } else {
             setImageInfo('Maximum File Size Exceeded');
-            setProfilePicSrc(user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+            setProfilePicSrc(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
             document.getElementById('profilePic').value = null;
           }
         };
         fr.readAsDataURL(file);
       } else {
         setImageInfo('Max File Size is 3MB');
-        setProfilePicSrc(user.picture ? `${window.server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+        setProfilePicSrc(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
       }
     };
     input.click();
