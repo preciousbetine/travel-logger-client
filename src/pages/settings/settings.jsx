@@ -4,7 +4,6 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import Cookies from 'js-cookie';
 import { setNewUser, setLoggedInState, serverAddress } from '../../redux/loginSlice';
 import { userData, fetchUserData, clearUser } from '../../redux/userDataSlice';
 import './settings.css';
@@ -13,6 +12,7 @@ import Alert from '../../components/Alert/Alert';
 function AllSettings(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const server = useSelector(serverAddress);
   const { setHeader } = props;
   const nav = (
     <Link to="/settings" className="text-dark text-decoration-none">Settings</Link>
@@ -24,12 +24,16 @@ function AllSettings(props) {
     pathname: '/settings/editProfile',
     setHeader,
   };
-  const logOut = () => {
-    Cookies.remove('user_session_id');
-    Cookies.remove('session-token');
-    dispatch(clearUser());
-    dispatch(setLoggedInState(false));
-    navigate('/login');
+  const logOut = async () => {
+    fetch(`${server}/logout`, {
+      credentials: 'include',
+    }).then(() => {
+      dispatch(clearUser());
+      dispatch(setLoggedInState(false));
+      navigate('/login');
+    }).catch(() => {
+      navigate('/login');
+    });
   };
   return (
     <div className="settingsPage">
