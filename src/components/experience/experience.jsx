@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { serverAddress } from '../../redux/loginSlice';
 
 import './experience.css';
+import { userData } from '../../redux/userDataSlice';
 
 function Experience(props) {
   const {
@@ -15,6 +16,7 @@ function Experience(props) {
     showDeleteOption,
   } = props;
   const server = useSelector(serverAddress);
+  const user = useSelector(userData);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
   const dateString = `${date.getDate()} 
@@ -23,46 +25,51 @@ function Experience(props) {
                       ${date.getHours().toLocaleString('en-US', { minimumIntegerDigits: 2 })}:${date.getMinutes().toLocaleString('en-US', { minimumIntegerDigits: 2 })}`;
 
   return (
-    <tr className="experience bg-light">
+    <tr className="experience">
       <td>
-        <div className="d-flex justify-content-between align-items-center p-2">
-          <span className="bg-dark text-light text-center p-3 py-1 fw-bold rounded-pill font-15">
-            <i className="fa-solid fa-calendar-days me-2" />
-            <span>
-              { dateString }
-            </span>
-          </span>
-          {
-            showDeleteOption ? (
-              <button type="button" className="btn btn-link text-danger" onClick={deleteExperience}>delete</button>
-            ) : null
-          }
-        </div>
-        <div className="mx-3 mb-2 p-3 py-1">
-          { experienceName ? (
-            <strong>
-              {experienceName}
-              {' '}
-              :
-              {' '}
-            </strong>
-          ) : null }
-          { description }
-        </div>
-        {images.length ? (
-          <div>
-            { (images.length > 1) ? (
-              <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image-1" alt="" src={`${server}/photo/${images[0]}`} />
-                <img className="post-image-2" alt="" src={`${server}/photo/${images[1]}`} />
+        <div className="d-flex p-2 pt-0 border-bottom">
+          <img className="postProfilePicture me-3" alt="" src={`${server}/photo/${user.picture}`} />
+          <div className="w-100">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 className="font-15 m-0">{user.name}</h4>
+                <h4 className="font-13 fw-normal">{dateString}</h4>
               </div>
-            ) : (
-              <div className="post-image-div p-2 m-3 my-1">
-                <img className="post-image" alt="" src={`${server}/photo/${images[0]}`} />
+              {
+                showDeleteOption ? (
+                  <button type="button" className="btn btn-link text-color2 p-0" onClick={deleteExperience}>
+                    <i className="fa-solid fa-trash-can me-2" />
+                  </button>
+                ) : null
+              }
+            </div>
+            <div>
+              { experienceName ? (
+                <strong>
+                  {experienceName}
+                  {' '}
+                  :
+                  {' '}
+                </strong>
+              ) : null }
+              { description }
+            </div>
+            {images.length ? (
+              <div className="my-2">
+                { (images.length > 1) ? (
+                  <div className="post-image-div">
+                    <img className="post-image-1" alt="" src={`${server}/photo/${images[0]}`} />
+                    <img className="post-image-2" alt="" src={`${server}/photo/${images[1]}`} />
+                  </div>
+                ) : (
+                  <div className="post-image-div">
+                    <img className="post-image" alt="" src={`${server}/photo/${images[0]}`} />
+                  </div>
+                )}
               </div>
-            )}
+            ) : null}
           </div>
-        ) : null}
+        </div>
       </td>
     </tr>
   );

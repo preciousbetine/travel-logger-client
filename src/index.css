@@ -13,6 +13,9 @@ code {
     monospace;
 }
 
+.font-13 {
+  font-size: 13px;
+}
 .font-15 {
   font-size: 15px;
 }
@@ -24,6 +27,34 @@ code {
 }
 .font-30 {
   font-size: 30px;
+}
+
+.text-color1 {
+  color: rgb(61, 58, 63);
+}
+
+.mw-300 {
+  max-width: 300px;
+}
+
+.text-color2 {
+  color: rgb(92, 173, 15);
+}
+
+.bg-color2 {
+  background-color: rgb(92, 173, 15);
+}
+
+.border-color2 {
+  border: 2px solid rgb(92, 173, 15) !important;
+}
+
+.bg-red {
+  background: red;
+}
+
+.hover-color3:hover{
+  color: rgb(92, 190, 15);
 }
 
 .btn:focus, .btn-close:focus {

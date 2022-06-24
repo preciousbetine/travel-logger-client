@@ -20,47 +20,90 @@ import UpdateCredentials from '../updateCredentials/updateCredentials';
 function SideBar() {
   const { pathname } = useLocation();
   return (
-    <div className="sideBar p-2">
-      <div className="top-section d-flex">
-        <LinkContainer to="/search">
+    <div className="sideBar">
+      <div id="lgSideBar">
+        <div className="top-section d-flex">
+          <LinkContainer to="/search">
+            <button
+              title="Find other travellers"
+              type="button"
+              className={`btn mt-3 sideBarItem hover-color3 ${pathname === '/search' ? 'text-color2' : ''}`}
+            >
+              <i className="fa-solid fa-magnifying-glass font-30" />
+            </button>
+          </LinkContainer>
           <button
-            title="Find other travellers"
+            title="New Experience"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/search' ? 'text-light bg-dark' : ''}`}
+            className={`btn mt-3 sideBarItem hover-color3 ${pathname === '/new' ? 'text-color2' : ''}`}
+            onClick={() => {
+              const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
+              window.newPostModal = modal;
+              modal.show();
+            }}
           >
-            <i className="fa-solid fa-magnifying-glass font-30" />
+            <i className="fa-solid fa-circle-plus font-30" />
           </button>
-        </LinkContainer>
+        </div>
+        <div className="bottom-section d-flex pb-2">
+          <LinkContainer to="/profile">
+            <button
+              title="Profile"
+              type="button"
+              className={`btn mt-3 sideBarItem hover-color3 ${pathname === '/profile' ? 'text-color2' : ''}`}
+            >
+              <i className="fa-solid fa-user font-30" />
+            </button>
+          </LinkContainer>
+          <LinkContainer to="/settings">
+            <button
+              title="Settings"
+              type="button"
+              className={`btn mt-3 sideBarItem hover-color3 ${pathname.startsWith('/settings') ? 'text-color2' : ''}`}
+            >
+              <i className="fa-solid fa-gear font-30" />
+            </button>
+          </LinkContainer>
+        </div>
+      </div>
+      <div id="smSideBar">
         <button
           title="New Experience"
           type="button"
-          className={`btn mt-3 sideBarItem ${pathname === '/new' ? 'text-light bg-dark' : ''}`}
+          className={`btn mt-3 sideBarItem ${pathname === '/new' ? '' : ''}`}
           onClick={() => {
             const modal = new bootstrap.Modal(document.getElementById('newPostModal'));
             window.newPostModal = modal;
             modal.show();
           }}
         >
-          <i className="fa-solid fa-circle-plus font-30" />
+          <i className="fa-solid fa-circle-plus text-color1 font-25 p-2 rounded-3" />
         </button>
-      </div>
-      <div className="bottom-section d-flex pb-2">
+        <LinkContainer to="/search">
+          <button
+            title="Find other travellers"
+            type="button"
+            className="btn mt-3 sideBarItem"
+          >
+            <i className={`fa-solid fa-magnifying-glass text-color1 p-2 rounded-3 ${pathname === '/search' ? 'font-20 text-color2' : 'font-25'}`} />
+          </button>
+        </LinkContainer>
         <LinkContainer to="/profile">
           <button
             title="Profile"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname === '/profile' ? 'text-light bg-dark' : ''}`}
+            className="btn mt-3 sideBarItem"
           >
-            <i className="fa-solid fa-user font-30" />
+            <i className={`fa-solid text-color1 fa-user p-2 rounded-3 ${pathname === '/profile' ? 'font-20 text-color2' : 'font-25'}`} />
           </button>
         </LinkContainer>
         <LinkContainer to="/settings">
           <button
             title="Settings"
             type="button"
-            className={`btn mt-3 sideBarItem ${pathname.startsWith('/settings') ? 'text-light bg-dark' : ''}`}
+            className="btn mt-3 sideBarItem"
           >
-            <i className="fa-solid fa-gear font-30" />
+            <i className={`fa-solid text-color1 fa-gear p-2 rounded-3 ${pathname === '/settings' ? 'font-20 text-color2' : 'font-25'}`} />
           </button>
         </LinkContainer>
       </div>

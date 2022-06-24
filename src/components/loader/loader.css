@@ -4,9 +4,9 @@
 }
 
 .load {
-  border: 5px solid var(--bs-light); /* Light grey */
-  border-top: 5px solid var(--bs-dark); /* Blue */
-  border-right: 5px solid var(--bs-dark); /* Blue */
+  border: 5px solid rgb(92, 173, 15);
+  border-top: 5px solid var(--bs-light); 
+  border-right: 5px solid var(--bs-light);
   border-radius: 50%;
   width: 50px;
   height: 50px;

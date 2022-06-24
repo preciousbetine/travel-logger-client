@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { userData } from '../../redux/userDataSlice';
 import Experience from '../../components/experience/experience';
@@ -22,7 +22,13 @@ function Profile(props) {
   const server = useSelector(serverAddress);
 
   const nav = (
-    <Link to="/profile" className="text-dark text-decoration-none">My Profile</Link>
+    <div className="d-flex align-items-center">
+      <i className="fa-solid fa-briefcase me-3 text-color2 font-20" />
+      <span>
+        <h3 className="m-0 font-20">{user.name}</h3>
+        <h6 className="text-secondary m-0 font-15">{user.location}</h6>
+      </span>
+    </div>
   );
   useEffect(() => {
     setHeader(nav);
@@ -78,18 +84,13 @@ function Profile(props) {
   return (
     <div className="profilePage" id="profilePage" onScroll={onScroll}>
       <div className="modal fade" id="deleteExperienceDialog" tabIndex="-1" aria-labelledby="deleteExperienceLabel" aria-hidden="true">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header bg-danger">
-              <h5 className="modal-title text-white" id="deleteExperienceLabel">Delete this experience?</h5>
-              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" />
-            </div>
-            <div className="modal-body d-flex justify-content-between align-items-center">
-              <span>This cannot be undone</span>
-              <span>
-                <button type="button" className="btn btn-link text-secondary me-2" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" className="btn btn-danger" onClick={deleteExperience}>Delete</button>
-              </span>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content mw-300 m-auto">
+            <div className="modal-body">
+              <h3 className="my-3">Delete This Experience?</h3>
+              <div>This can’t be undone and it will be removed from your profile.</div>
+              <button type="button" className="w-100 btn bg-red text-white mt-4 my-2 rounded-pill" onClick={deleteExperience}>Delete</button>
+              <button type="button" className="w-100 btn btn-white me-2 rounded-pill border-secondary" data-bs-dismiss="modal">Cancel</button>
             </div>
           </div>
         </div>
@@ -133,45 +134,50 @@ function Profile(props) {
         {
           user.ready ? (
             <>
-              <img
-                src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
-                alt=""
-                className="userImage"
-              />
-              <div className="d-flex flex-column justify-content-center align-items-start">
-                <h2>{user.name}</h2>
+              <div className="coverImage bg-color2">
+                <img
+                  src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                  alt=""
+                  className="userImage bg-white"
+                />
+              </div>
+              <div className="ps-3 d-flex pb-3 flex-column justify-content-center align-items-start">
+                <LinkContainer to="/settings/editProfile">
+                  <button type="button" className="btn border border-2 rounded-pill text-dark align-self-end me-2 px-4">Edit Profile</button>
+                </LinkContainer>
+                <h4 className="m-0">{user.name}</h4>
+                <h5 className="text-secondary m-0 font-15">Joined 2022</h5>
+                <div className="text-secondary p-3 ps-0">{user.description}</div>
                 <div className="infoDisplay mb-1">
                   {
-              (user.location && user.location.trim !== '') ? (
-                <div>
-                  <i className="fa-solid fa-location-dot text-center w-20" />
-                  <span className="ms-2">{user.location}</span>
-                </div>
-              ) : null
-            }
+                    (user.location && user.location.trim !== '') ? (
+                      <div>
+                        <i className="fa-solid fa-location-dot text-secondary text-center" />
+                        <span className="ms-2">{user.location}</span>
+                      </div>
+                    ) : null
+                  }
                   {
-              (user.website && user.website.trim !== '') ? (
-                <div>
-                  <i className="fa-solid fa-link text-center w-20" />
-                  <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
+                    (user.website && user.website.trim !== '') ? (
+                      <div>
+                        <i className="fa-solid fa-link text-center" />
+                        <span className="ms-1"><a className="text-color2" href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
+                      </div>
+                    ) : null
+                  }
                 </div>
-              ) : null
-            }
-                  <div className="text-secondary px-2 pt-2">{user.description}</div>
-                </div>
-                <LinkContainer to="/settings/editProfile">
-                  <button type="button" className="btn p-0 btn-link text-dark">Edit Profile</button>
-                </LinkContainer>
               </div>
             </>
           ) : <Loader />
         }
       </div>
-      <div className="pb-3">
-        <table className={`table ${experiences.length > 0 ? 'table-striped' : ''}`}>
+      <div>
+        <table className="table table-borderless">
           <thead className="">
             <tr>
-              <th className="col ps-4">My Experiences</th>
+              <th className="ps-4 pb-3">
+                <span className="experienceHeader">Experiences</span>
+              </th>
             </tr>
           </thead>
           <tbody>

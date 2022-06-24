@@ -31,3 +31,22 @@
   border-bottom-right-radius: 20px;
   border-top-right-radius: 20px;
 }
+
+.postProfilePicture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media only screen and (max-width: 769px) {
+  .post-image-1, .post-image-2, .post-image {
+    height: 250px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .post-image-1, .post-image-2, .post-image {
+    height: 172px;
+  }
+}
