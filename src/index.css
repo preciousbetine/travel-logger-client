@@ -8,11 +8,6 @@ body {
   background: rgb(255, 255, 255);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
 .font-13 {
   font-size: 13px;
 }
@@ -29,12 +24,46 @@ code {
   font-size: 30px;
 }
 
+.h-70px {
+  height: 70px;
+}
+
+.content-only, .content-only:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-black {
+  background: black;
+  color: white;
+}
+
+.btn-black:hover {
+  background: white;
+  color: black;
+  border: 2px solid black;
+}
+
+.btn-black:focus {
+  background: black;
+  color: white;
+}
+
+.text-black {
+  color: black;
+}
+
 .text-color1 {
   color: rgb(61, 58, 63);
 }
 
 .mw-300 {
   max-width: 300px;
+}
+
+.hover-danger:hover {
+  color: var(--bs-danger);
 }
 
 .text-color2 {
@@ -66,4 +95,9 @@ code {
 .btn, .btn-close {
   outline: none !important;
   box-shadow: none !important;
+}
+
+.focus-border-color2:focus-within {
+  border-color: rgb(92, 173, 15) !important; 
+  color: rgb(92, 173, 15) !important;
 }

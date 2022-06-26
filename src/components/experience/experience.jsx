@@ -37,7 +37,7 @@ function Experience(props) {
               </div>
               {
                 showDeleteOption ? (
-                  <button type="button" className="btn btn-link text-color2 p-0" onClick={deleteExperience}>
+                  <button type="button" className="btn btn-link text-color2 hover-danger p-0" onClick={deleteExperience}>
                     <i className="fa-solid fa-trash-can me-2" />
                   </button>
                 ) : null

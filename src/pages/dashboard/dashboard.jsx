@@ -19,6 +19,26 @@ import UpdateCredentials from '../updateCredentials/updateCredentials';
 
 function SideBar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const [editProfileModal, setEditProfileModal] = useState(null);
+  useEffect(() => {
+    if (pathname === '/settings/editProfile') {
+      const modal = new bootstrap.Modal(document.getElementById('editProfileDialog'));
+      if (modal) {
+        setEditProfileModal(modal);
+        window.editProfileModal = modal;
+        document.getElementById('editProfileDialog').addEventListener('hidden.bs.modal', () => {
+          navigate('/profile');
+        });
+        document.getElementById('editProfileDialog').addEventListener('shown.bs.modal', () => {
+          document.getElementById('newUserName').focus();
+        });
+        modal.show();
+      }
+    } else if (editProfileModal) {
+      editProfileModal.hide();
+    }
+  }, [pathname]);
   return (
     <div className="sideBar">
       <div id="lgSideBar">
@@ -155,7 +175,8 @@ function Dashboard() {
       </div>
       <div id="dashboardAlertPlaceHolder" />
       <div className="mainPage">
-        <div className="page-header d-flex align-items-center px-3 font-20">
+        <EditProfile />
+        <div className="page-header align-items-center px-3 font-20">
           {header}
         </div>
         <div>
@@ -163,8 +184,8 @@ function Dashboard() {
             <Route path="/search" element={<Search setHeader={setHeader} />} />
             <Route path="/search/*" element={<Search setHeader={setHeader} />} />
             <Route path="/profile" element={<Profile setHeader={setHeader} />} />
-            <Route path="/settings/editProfile" element={<EditProfile setHeader={setHeader} />} />
             <Route path="/settings/updateCredentials" element={<UpdateCredentials setHeader={setHeader} />} />
+            <Route path="/settings/editProfile" element={<Profile setHeader={setHeader} />} />
             <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
           </Routes>
         </div>

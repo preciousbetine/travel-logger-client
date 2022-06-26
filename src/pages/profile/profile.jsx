@@ -22,7 +22,7 @@ function Profile(props) {
   const server = useSelector(serverAddress);
 
   const nav = (
-    <div className="d-flex align-items-center">
+    <div className="d-flex align-items-center h-100">
       <i className="fa-solid fa-briefcase me-3 text-color2 font-20" />
       <span>
         <h3 className="m-0 font-20">{user.name}</h3>
@@ -32,7 +32,7 @@ function Profile(props) {
   );
   useEffect(() => {
     setHeader(nav);
-  }, []);
+  }, [user]);
   useEffect(() => {
     fetch(`${server}/myExperiences?index=${currentIndex}`, {
       credentials: 'include',
@@ -95,37 +95,37 @@ function Profile(props) {
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="deleteToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-danger text-light">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="deleteToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-color2 text-light">
             Experience Deleted!
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="profileUpdatedToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-success text-light">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="profileUpdatedToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-color2 text-light w-100">
             Profile Updated Successfully!
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="passwordUpdatedToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-success text-light">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="passwordUpdatedToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-color2 text-light">
             Password Updated Successfully!
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="errorToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="errorToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
           <div className="toast-body d-flex align-items-center bg-danger text-light">
             An Error Occured!
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed w-100 bottom-0 start-0 p-3 d-flex justify-content-end">
-        <div id="postToast" className="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-success text-light">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="postToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-color2 text-light w-100">
             Experience Posted
           </div>
         </div>
@@ -143,7 +143,7 @@ function Profile(props) {
               </div>
               <div className="ps-3 d-flex pb-3 flex-column justify-content-center align-items-start">
                 <LinkContainer to="/settings/editProfile">
-                  <button type="button" className="btn border border-2 rounded-pill text-dark align-self-end me-2 px-4">Edit Profile</button>
+                  <button type="button" className="btn border border-2 rounded-pill text-dark align-self-end me-2 px-4" id="editProfileButton">Edit Profile</button>
                 </LinkContainer>
                 <h4 className="m-0">{user.name}</h4>
                 <h5 className="text-secondary m-0 font-15">Joined 2022</h5>

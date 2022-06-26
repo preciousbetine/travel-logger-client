@@ -1,9 +1,9 @@
 
 .settingsPage {
   position: relative;
-  height: calc(100vh - 70px);
+  /* height: calc(100vh - 70px); */
+  height: 10px;
   margin-top: 70px;
-  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,11 +19,19 @@
   text-decoration: underline;
 }
 
-.selectedImage {
-  width: 200px;
-  height: 200px;
-  border-radius: 20px;
+.editCoverImage {
+  height: 100px;
+  width: 100%;
+}
+
+.editUserImage {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
   object-fit: cover;
+  margin-left: 10px;
+  margin-top: 50px;
+  border: 5px solid white;
 }
 
 #settingsAlert {
@@ -32,4 +40,40 @@
   top: 10px;
   left: 50vw;
   transform: translateX(-50%);
+}
+
+#addPhotoIcon {
+  position: absolute;
+  opacity: 0.5;
+  font-size: 25px;
+  top: 170px;
+  left: 60px;
+  transform: translate(-50%, -50%);
+}
+
+.visible-count div:nth-child(1) span:nth-child(2) {
+  display: none !important;
+}
+
+.visible-count:focus-within div:nth-child(1) span:nth-child(2) {
+  display: flex !important;
+}
+
+@media only screen and (min-width: 550px) {
+  .editCoverImage {
+    height: 200px;
+    margin-bottom: 75px;
+  }
+
+  .editUserImage {
+    width: 150px;
+    height: 150px;
+    margin-top: 125px;
+  }
+
+  #addPhotoIcon {
+    left: 85px;
+    top: 270px;
+    font-size: 40px;
+  }
 }

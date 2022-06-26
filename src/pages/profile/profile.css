@@ -1,8 +1,8 @@
 
 .profilePage {
   position: relative;
-  height: calc(100vh - 70px);
   margin-top: 70px;
+  height: calc(100vh - 70px);
   overflow-y: auto;
 }
 
@@ -16,6 +16,7 @@
 .coverImage {
   height: 90px;
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .userImage {
@@ -33,6 +34,12 @@
   font-size: 16px;
 }
 
+#editProfileButton:hover {
+  background-color: rgb(92, 173, 15) !important;
+  color: white !important;
+  border-color: rgb(92, 173, 15) !important;
+}
+
 @media only screen and (min-width: 550px) {
   .coverImage {
     height: 150px;
@@ -42,5 +49,14 @@
     height: 100px;
     width: 100px;
     margin-top: 100px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .toast-sm {
+    bottom: 49px !important;
+    padding: 0px !important;
+    left: 0px;
+    width: 100vw;
   }
 }

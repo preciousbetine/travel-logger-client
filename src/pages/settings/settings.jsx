@@ -52,8 +52,7 @@ AllSettings.propTypes = {
   setHeader: PropTypes.func.isRequired,
 };
 
-export function EditProfile(props) {
-  const { setHeader } = props;
+export function EditProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const server = useSelector(serverAddress);
@@ -62,27 +61,9 @@ export function EditProfile(props) {
   const [newUserLocation, setNewUserLocation] = useState('');
   const [newUserWebsite, setNewUserWebsite] = useState('');
   const [newUserBio, setNewUserBio] = useState('');
-  const [imageInfo, setImageInfo] = useState('Max File Size is 3MB');
   const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
 
-  const nav = (
-    <>
-      <Link to="/settings" className="text-dark me-1 text-decoration-none">Settings</Link>
-      <span className="text-dark">/</span>
-      <Link to="/settings/editProfile" className="text-dark ms-1">Edit Profile</Link>
-    </>
-  );
-  useEffect(() => {
-    setNewUserName(user.name);
-    setNewUserLocation(user.location);
-    setNewUserWebsite(user.website);
-    setNewUserBio(user.description);
-    setHeader(nav);
-    dispatch(setNewUser(false));
-  }, []);
-
-  const submitForm = (e) => {
-    e.preventDefault();
+  const submitForm = () => {
     const newProfileInfo = {
       newUserName,
       newUserLocation,
@@ -115,6 +96,14 @@ export function EditProfile(props) {
     });
   };
 
+  useEffect(() => {
+    setNewUserName(user.name);
+    setNewUserLocation(user.location);
+    setNewUserWebsite(user.website);
+    setNewUserBio(user.description);
+    dispatch(setNewUser(false));
+  }, []);
+
   const selectImage = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -126,16 +115,13 @@ export function EditProfile(props) {
         fr.onload = () => {
           if ((file.size / 1024) < 3072) {
             setProfilePicSrc(fr.result);
-            setImageInfo('Image Upload Successful');
           } else {
-            setImageInfo('Maximum File Size Exceeded');
             setProfilePicSrc(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
             document.getElementById('profilePic').value = null;
           }
         };
         fr.readAsDataURL(file);
       } else {
-        setImageInfo('Max File Size is 3MB');
         setProfilePicSrc(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
       }
     };
@@ -163,67 +149,104 @@ export function EditProfile(props) {
       default: break;
     }
   };
+
   return (
-    <div className="settingsPage">
-      <div id="settingsAlert" />
-      <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
-        <label htmlFor="profilePic" className="text-dark w-100">
-          Profile Picture
-          <div>
-            <button
-              onClick={() => { selectImage(); }}
-              className="btn btn-dark border-dark d-flex justify-content-center align-items-center mt-1"
-              type="button"
+    <div className="modal fade" id="editProfileDialog" aria-labelledby="editProfileLabel" aria-hidden="true">
+      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
+        <div className="modal-content">
+          <div className="modal-body p-0">
+            <div className="d-flex align-items-center justify-content-between px-2 h-70px">
+              <button
+                className="btn"
+                type="button"
+                onClick={() => {
+                  window.editProfileModal.hide();
+                  navigate(-1);
+                }}
+              >
+                <i className="fa-solid fa-arrow-left-long" />
+              </button>
+              <h3 className="m-0 ms-4 me-auto font-20 text-black">Edit profile</h3>
+              <button type="button" className="btn btn-black px-4 rounded-pill" onClick={submitForm}>Save</button>
+            </div>
+            <div
+              className="editCoverImage bg-color2"
             >
-              <i className="fa-solid fa-image font-30 me-2" />
-              Choose Picture
-            </button>
+              <img
+                alt=""
+                src={profilePicSrc}
+                id="profilePic"
+                className="editUserImage bg-white"
+              />
+              <i
+                aria-label="Profile Pic"
+                className="fa-solid fa-camera text-white"
+                id="addPhotoIcon"
+                onClick={() => { selectImage(); }}
+                onKeyDown={() => {}}
+                role="button"
+                tabIndex={-2}
+              />
+            </div>
+            <form className="w-100 d-flex flex-column mt-5 p-3">
+              <label htmlFor="newUserName" className="border border-2 rounded-3 w-100 p-3 py-2 focus-border-color2 text-secondary visible-count">
+                <div className="d-flex justify-content-between font-15">
+                  <span>Name</span>
+                  <span>
+                    {newUserName.length}
+                    {' '}
+                    / 20
+                  </span>
+                </div>
+                <input autoComplete="off" type="text" maxLength={20} className="d-block mt-2 content-only p-0 w-100" id="newUserName" value={newUserName} onChange={handleInputChange} />
+              </label>
+              <label htmlFor="newUserLocation" className="border border-2 rounded-3 w-100 p-3 py-2 mt-2 focus-border-color2 text-secondary visible-count">
+                <div className="d-flex justify-content-between font-15">
+                  <span>Current Location</span>
+                  <span>
+                    {newUserLocation.length}
+                    {' '}
+                    / 30
+                  </span>
+                </div>
+                <input autoComplete="off" type="text" maxLength={30} className="d-block mt-2 content-only p-0 w-100" id="newUserLocation" value={newUserLocation} onChange={handleInputChange} />
+              </label>
+              <label htmlFor="newUserWebsite" className="border border-2 rounded-3 w-100 p-3 py-2 mt-2 focus-border-color2 text-secondary visible-count">
+                <div className="d-flex justify-content-between font-15">
+                  <span>Website</span>
+                  <span>
+                    {newUserWebsite.length}
+                    {' '}
+                    / 50
+                  </span>
+                </div>
+                <input autoComplete="off" type="text" maxLength={50} className="d-block mt-2 content-only p-0 w-100" id="newUserWebsite" value={newUserWebsite} onChange={handleInputChange} />
+              </label>
+              <label htmlFor="newUserBio" className="border border-2 rounded-3 w-100 p-3 py-2 mt-2 focus-border-color2 text-secondary visible-count">
+                <div className="d-flex justify-content-between font-15">
+                  <span>Bio</span>
+                  <span>
+                    {newUserBio.length}
+                    {' '}
+                    / 200
+                  </span>
+                </div>
+                <textarea
+                  style={{ resize: 'none' }}
+                  maxLength="200"
+                  className="d-block mt-2 content-only p-0 w-100"
+                  id="newUserBio"
+                  rows="5"
+                  value={newUserBio}
+                  onChange={handleInputChange}
+                />
+              </label>
+            </form>
           </div>
-          <small id="emailHelp" className="form-text text-muted d-block">{imageInfo}</small>
-          <img
-            alt=""
-            src={profilePicSrc}
-            id="profilePic"
-            className="selectedImage mt-2"
-          />
-        </label>
-        <label htmlFor="newUserName" className="text-dark w-100 mt-3">
-          Display Name
-          <input type="text" className="form-control mt-2" id="newUserName" value={newUserName} onChange={handleInputChange} />
-        </label>
-        <label htmlFor="newUserLocation" className="text-dark w-100 mt-3">
-          Current Location
-          <input type="text" className="form-control mt-2" id="newUserLocation" value={newUserLocation} onChange={handleInputChange} />
-        </label>
-        <label htmlFor="newUserWebsite" className="text-dark w-100 mt-3">
-          Website
-          <input type="text" className="form-control mt-2" id="newUserWebsite" value={newUserWebsite} onChange={handleInputChange} />
-        </label>
-        <label htmlFor="newUserBio" className="text-dark w-100 mt-3">
-          Bio [Length : 200 Characters Max]
-          <textarea
-            style={{ resize: 'none' }}
-            maxLength="200"
-            className="form-control mt-2"
-            id="newUserBio"
-            rows="5"
-            value={newUserBio}
-            onChange={handleInputChange}
-          />
-        </label>
-        <div className="btn-group mt-3 align-self-end" role="group">
-          <LinkContainer to="/settings">
-            <button type="button" className="btn btn-link text-dark px-4">Discard</button>
-          </LinkContainer>
-          <button type="submit" className="btn btn-dark border border-dark px-4">Save</button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
-
-EditProfile.propTypes = {
-  setHeader: PropTypes.func.isRequired,
-};
 
 export default AllSettings;
