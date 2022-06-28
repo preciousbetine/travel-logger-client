@@ -175,7 +175,7 @@ function Profile(props) {
         }
       </div>
       <div>
-        <table className="table table-borderless" id="experienceTable">
+        <table className="table table-borderless">
           <thead>
             <tr>
               <th className="ps-4 pb-3">
