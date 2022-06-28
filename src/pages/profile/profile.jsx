@@ -48,7 +48,10 @@ function Profile(props) {
   }, []);
 
   const onScroll = (e) => {
-    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
+    if (
+      e.currentTarget.scrollHeight - e.currentTarget.scrollTop
+      <= (e.currentTarget.clientHeight + 10)
+    ) {
       fetch(`${server}/myExperiences?index=${currentIndex}`, {
         credentials: 'include',
       })
@@ -172,8 +175,8 @@ function Profile(props) {
         }
       </div>
       <div>
-        <table className="table table-borderless">
-          <thead className="">
+        <table className="table table-borderless" id="experienceTable">
+          <thead>
             <tr>
               <th className="ps-4 pb-3">
                 <span className="experienceHeader">Experiences</span>

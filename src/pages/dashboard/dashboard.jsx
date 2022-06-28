@@ -179,16 +179,14 @@ function Dashboard() {
         <div className="page-header align-items-center px-3 font-20">
           {header}
         </div>
-        <div>
-          <Routes>
-            <Route path="/search" element={<Search setHeader={setHeader} />} />
-            <Route path="/search/*" element={<Search setHeader={setHeader} />} />
-            <Route path="/profile" element={<Profile setHeader={setHeader} />} />
-            <Route path="/settings/updateCredentials" element={<UpdateCredentials setHeader={setHeader} />} />
-            <Route path="/settings/editProfile" element={<Profile setHeader={setHeader} />} />
-            <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/search" element={<Search setHeader={setHeader} />} />
+          <Route path="/search/*" element={<Search setHeader={setHeader} />} />
+          <Route path="/profile" element={<Profile setHeader={setHeader} />} />
+          <Route path="/settings/updateCredentials" element={<UpdateCredentials setHeader={setHeader} />} />
+          <Route path="/settings/editProfile" element={<Profile setHeader={setHeader} />} />
+          <Route path="/settings" element={<AllSettings setHeader={setHeader} />} />
+        </Routes>
       </div>
       <div className="rightSideBar">
         <div className="discover">

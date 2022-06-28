@@ -1,7 +1,6 @@
 
 .profilePage {
   position: relative;
-  margin-top: 70px;
   height: calc(100vh - 70px);
   overflow-y: auto;
 }
@@ -59,4 +58,9 @@
     left: 0px;
     width: 100vw;
   }
+
+  #experienceTable {
+    margin-bottom: 60px;
+  }
+  
 }

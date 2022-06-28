@@ -32,9 +32,9 @@
 .page-header {
   border-bottom: 0.5px solid var(--bs-secondary);
   background: white;
-  width: calc(100vw - 90px);
   height: 70px;
-  position: fixed;
+  position: sticky;
+  top: 0px;
   z-index: 1;
 }
 
@@ -59,6 +59,7 @@
 .mainPage {
   width: 100%;
   height: 100vh;
+  overflow-y: hidden;
 }
 
 .dashboard {
@@ -89,7 +90,7 @@
     display: block;
   }
 
-.mainPage, .page-header {
+.mainPage {
     width: 700px;
     border-right: 2px solid var(--bs-secondary);
   }
@@ -107,7 +108,6 @@
   }
 
   .page-header {
-    background: rgba(0, 0, 0, 0.1);
     width: 100%;
   }
 
@@ -129,6 +129,7 @@
     height: 50px;
     border-right: none;
     position: fixed;
+    bottom: 0px;
     flex-direction: row;
     z-index: 1;
     background-color: white;
@@ -142,9 +143,5 @@
   .sideBarItem {
     padding: 0px;
     margin: 0px !important;
-  }
-
-  .profilePage, .settingsPage {
-    height: calc(100vh - 120px);
   }
 }
