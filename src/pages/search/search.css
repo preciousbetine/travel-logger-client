@@ -2,8 +2,7 @@
 .searchPage {
   position: relative;
   height: calc(100vh - 70px);
-  margin-top: 70px;
-  padding: 30px;
+  /* padding: 30px; */
   overflow-y: auto;
 }
 
@@ -15,8 +14,20 @@
   transform: translateX(-50%);
 }
 
+.resultImage {
+  height: 40px;
+  width: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.searchResult:hover {
+  background: rgb(92, 173, 15) !important;
+  padding: .6rem !important;
+}
+
 @media only screen and (max-width: 550px) {
   .searchPage {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 120px);
   }
 }

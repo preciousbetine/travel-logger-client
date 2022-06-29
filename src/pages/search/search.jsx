@@ -1,3 +1,4 @@
+/* global bootstrap */
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -5,7 +6,6 @@ import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
 import Loader from '../../components/loader/loader';
 import './search.css';
-import Alert from '../../components/Alert/Alert';
 import { serverAddress } from '../../redux/loginSlice';
 
 function Search(props) {
@@ -21,7 +21,10 @@ function Search(props) {
   const server = useSelector(serverAddress);
 
   const nav = (
-    <Link to="/search" className="text-dark text-decoration-none">Find Other Travellers</Link>
+    <div className="d-flex align-items-center h-100">
+      <i className="fa-solid fa-briefcase me-3 text-color2 font-20" />
+      <Link to="/search" className="text-dark text-decoration-none h3 m-0 font-20">Find Other Travellers</Link>
+    </div>
   );
 
   useEffect(() => {
@@ -51,7 +54,10 @@ function Search(props) {
 
   const onScroll = (e) => {
     if (search.trim().length === 0) return;
-    if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop <= e.currentTarget.clientHeight) {
+    if (
+      e.currentTarget.scrollHeight - e.currentTarget.scrollTop
+      <= (e.currentTarget.clientHeight + 10)
+    ) {
       fetch(`${server}/${id}/experiences?index=${currentIndex}`)
         .then((res) => res.json()).then((res) => {
           if (res.experiences.length > 0) {
@@ -59,14 +65,21 @@ function Search(props) {
             addExperiences([...experiences, ...res.experiences]);
           }
         }).catch(() => {
-          Alert('An Error Occured! Reload the page', 'danger', 'searchAlert');
+          const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+          toast.show();
         });
     }
   };
 
   const searchDatabase = async (e) => {
     if (e.target.value.trim().length === 0) { setSearchResults([]); } else {
-      let result = await fetch(`${server}/searchUser/${e.target.value.trim()}`);
+      let result;
+      try {
+        result = await fetch(`${server}/searchUser/${e.target.value.trim()}`);
+      } catch {
+        const toast = new bootstrap.Toast(document.getElementById('noInternetToast'));
+        toast.show();
+      }
       result = await result.json();
       setSearchResults(result.users);
     }
@@ -78,34 +91,54 @@ function Search(props) {
 
   return (
     <div className="searchPage" onScroll={onScroll}>
-      <div id="searchAlert" />
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="errorToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-danger text-light">
+            An Error Occured!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="noInternetToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-danger text-light">
+            🍳 Connection Lost!
+          </div>
+        </div>
+      </div>
       {id ? (
         <>
-          <div className="profileDiv border border-2 rounded-3">
+          <div className="profileDiv">
             {
               pageReady ? (
                 <>
-                  <img
-                    src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
-                    alt=""
-                    className="userImage"
-                  />
-                  <div className="d-flex flex-column justify-content-center align-items-start">
-                    <h2>{user.name}</h2>
+                  <div className="coverImage bg-color2">
+                    <img
+                      src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                      alt=""
+                      className="userImage bg-white"
+                    />
+                  </div>
+                  <div className="mt-5 ps-4 d-flex pb-3 flex-column justify-content-center align-items-start">
+                    <h4 className="m-0">{user.name}</h4>
+                    <h5 className="text-secondary m-0 font-15">Joined 2022</h5>
+                    <div className="text-secondary p-3 ps-0">{user.description}</div>
                     <div className="infoDisplay mb-1">
-                      {(user.location && user.location.trim !== '') ? (
-                        <div>
-                          <i className="fa-solid fa-location-dot text-center w-20" />
-                          <span className="ms-2">{user.location}</span>
-                        </div>
-                      ) : null}
-                      {(user.website && user.website.trim !== '') ? (
-                        <div>
-                          <i className="fa-solid fa-link text-center w-20" />
-                          <span className="ms-2"><a href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
-                        </div>
-                      ) : null}
-                      <div className="text-secondary px-2 pt-2">{user.description}</div>
+                      {
+                        (user.location && user.location.trim !== '') ? (
+                          <div>
+                            <i className="fa-solid fa-location-dot text-secondary text-center" />
+                            <span className="ms-2">{user.location}</span>
+                          </div>
+                        ) : null
+                      }
+                      {
+                        (user.website && user.website.trim !== '') ? (
+                          <div>
+                            <i className="fa-solid fa-link text-center" />
+                            <span className="ms-1"><a className="text-color2" href={`//${user.website}`} target="_blank" rel="noreferrer">{user.website}</a></span>
+                          </div>
+                        ) : null
+                      }
                     </div>
                   </div>
                 </>
@@ -114,11 +147,13 @@ function Search(props) {
               )
             }
           </div>
-          <div className="pb-3 mt-2">
-            <table className={`table ${experiences.length > 0 ? 'table-striped' : 'table-borderless'}`}>
-              <thead className="bg-light text-dark">
+          <div>
+            <table className="table table-borderless">
+              <thead>
                 <tr>
-                  <th className="col ps-4">Experiences</th>
+                  <th className="ps-4 pb-3">
+                    <span className="experienceHeader">Experiences</span>
+                  </th>
                 </tr>
               </thead>
               {
@@ -156,8 +191,11 @@ function Search(props) {
         </>
       ) : (
         <div>
-          <input className="font-20 p-3 form-control" placeholder="Start Typing To Search..." onChange={searchDatabase} />
-          <div>
+          <div className="p-3 d-flex align-items-center sticky-top bg-white">
+            <i className="fa fa-search d-inline-block text-secondary me-2" />
+            <input className="font-15 p-1 content-only d-inline-block w-100" placeholder="Start Typing To Search..." onChange={searchDatabase} />
+          </div>
+          <div className="px-3">
             {
               searchResults.map(
                 (result, index) => (
@@ -167,15 +205,13 @@ function Search(props) {
                     role="button"
                     tabIndex={index + 40}
                     onKeyDown={() => {}}
-                    className="my-2 p-2 bg-light d-flex align-items-center rounded-2"
+                    className="searchResult my-2 p-2 bg-dark text-white d-flex align-items-center rounded-2"
                   >
-                    <span>
-                      <img
-                        alt=""
-                        className="smallImg me-3 border border-light"
-                        src={`${server}/photo/${result.picture}`}
-                      />
-                    </span>
+                    <img
+                      alt=""
+                      className="resultImage me-3 border border-light"
+                      src={`${server}/photo/${result.picture}`}
+                    />
                     <span className="d-flex flex-column align-items-start">
                       <span>{result.name}</span>
                     </span>

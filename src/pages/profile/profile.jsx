@@ -61,8 +61,8 @@ function Profile(props) {
             addExperiences([...experiences, ...res.experiences]);
           }
         }).catch(() => {
-          myModal.hide();
-          navigate('/login');
+          const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+          toast.show();
         });
     }
   };

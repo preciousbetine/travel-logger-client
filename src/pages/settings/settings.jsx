@@ -15,7 +15,9 @@ function AllSettings(props) {
   const server = useSelector(serverAddress);
   const { setHeader } = props;
   const nav = (
-    <Link to="/settings" className="text-dark text-decoration-none">Settings</Link>
+    <div className="w-100 h-100 d-flex align-items-center">
+      <Link to="/settings" className="text-dark text-decoration-none">Settings</Link>
+    </div>
   );
   useEffect(() => {
     setHeader(nav);

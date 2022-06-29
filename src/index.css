@@ -86,6 +86,10 @@ body {
   color: rgb(92, 190, 15);
 }
 
+.toast-container {
+  z-index: 10;
+}
+
 .btn:focus, .btn-close:focus {
   outline: none !important;
   border: none !important;
