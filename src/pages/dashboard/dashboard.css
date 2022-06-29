@@ -66,14 +66,6 @@
   display: flex;
 }
 
-#dashboardAlertPlaceHolder {
-  position: fixed;
-  top: 10px;
-  left: 50vw;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-
 .top-section, .bottom-section {
   flex-direction: column;
 }

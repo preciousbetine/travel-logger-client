@@ -6,14 +6,6 @@
   overflow-y: auto;
 }
 
-#searchAlert {
-  position: fixed;
-  z-index: 2;
-  top: 10px;
-  left: 50vw;
-  transform: translateX(-50%);
-}
-
 .resultImage {
   height: 40px;
   width: 40px;

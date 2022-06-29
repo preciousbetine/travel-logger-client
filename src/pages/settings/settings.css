@@ -35,14 +35,6 @@
   border: 5px solid white;
 }
 
-#settingsAlert {
-  position: fixed;
-  z-index: 2;
-  top: 10px;
-  left: 50vw;
-  transform: translateX(-50%);
-}
-
 #addPhotoIcon {
   position: absolute;
   opacity: 0.5;
@@ -76,5 +68,14 @@
     left: 85px;
     top: 270px;
     font-size: 40px;
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .toast-sm-bottom {
+    bottom: 0px !important;
+    padding: 0px !important;
+    left: 0px;
+    width: 100vw;
   }
 }

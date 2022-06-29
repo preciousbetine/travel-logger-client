@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import { setNewUser, setLoggedInState, serverAddress } from '../../redux/loginSlice';
 import { userData, fetchUserData, clearUser } from '../../redux/userDataSlice';
 import './settings.css';
-import Alert from '../../components/Alert/Alert';
 
 function AllSettings(props) {
   const dispatch = useDispatch();
@@ -116,10 +115,12 @@ export function EditProfile() {
         }, 1000);
         navigate('/profile');
       } else {
-        Alert('Profile update failed', 'warning', 'settingsAlert', 'Error ');
+        const toast = new bootstrap.Toast(document.getElementById('profileUpdateFailedToast'));
+        toast.show();
       }
     }).catch(() => {
-      Alert('Profile update failed', 'warning', 'settingsAlert', 'Error ');
+      const toast = new bootstrap.Toast(document.getElementById('profileUpdateFailedToast'));
+      toast.show();
     });
   };
 
@@ -179,6 +180,19 @@ export function EditProfile() {
 
   return (
     <div className="modal fade" id="editProfileDialog" aria-labelledby="editProfileLabel" aria-hidden="true">
+      <div className="toast-container position-fixed end-0 p-3 toast-sm-bottom">
+        <div
+          id="profileUpdateFailedToast"
+          className="toast m-0 w-100"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-body d-flex align-items-center bg-danger text-light w-100">
+            Profile Update Failed!
+          </div>
+        </div>
+      </div>
       <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-fullscreen-sm-down">
         <div className="modal-content">
           <div className="modal-body p-0">

@@ -1,4 +1,4 @@
-/* global $ */
+/* global $,  bootstrap */
 import './login.css';
 import React, { useState } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setLoggedInState, setNewUser, serverAddress } from '../../redux/loginSlice';
 import { fetchUserData } from '../../redux/userDataSlice';
-import Alert from '../../components/Alert/Alert';
 
 function LoginPage(props) {
   const dispatch = useDispatch();
@@ -31,7 +30,8 @@ function LoginPage(props) {
           credentials: 'include',
         }).then((res) => res.json()).then(async (res) => {
           if (res.error) {
-            Alert(res.error, 'danger', 'loginAlertPlaceHolder');
+            const toast = new bootstrap.Toast(document.getElementById('loginFailedToast'));
+            toast.show();
             navigate('/login');
             return;
           }
@@ -42,8 +42,9 @@ function LoginPage(props) {
           setTimeout(async () => {
             await dispatch(setLoggedInState(true));
           }, 700);
-        }).catch((err) => {
-          Alert(err, 'danger', 'loginAlertPlaceHolder');
+        }).catch(() => {
+          const toast = new bootstrap.Toast(document.getElementById('loginFailedToast'));
+          toast.show();
           navigate('/login');
         });
       }
@@ -59,19 +60,19 @@ function LoginPage(props) {
     const emailRegex = /\S+@\S+\.\S+/;
     if (!email.match(emailRegex)) {
       document.getElementById('email').focus();
-      return { error: 'Please Enter a valid email address' };
+      return false;
     }
     if (name.trim().length === 0) {
       document.getElementById('name').focus();
-      return { error: 'Name Cannot Be Blank!' };
+      return false;
     }
     if (password.trim().length < 8) {
       document.getElementById('password').focus();
-      return { error: 'Enter a Valid Password!' };
+      return false;
     }
     if (password !== passwordConfirm) {
       document.getElementById('passwordConfirm').focus();
-      return { error: 'Passwords Do Not Match!' };
+      return false;
     }
     return true;
   };
@@ -87,11 +88,7 @@ function LoginPage(props) {
     if (e.target.id === 'login-form') {
       endPoint = 'emailLogin';
     } else {
-      const result = validateForm();
-      if (result.error) {
-        Alert(result.error, 'danger', 'loginAlertPlaceHolder');
-        return;
-      }
+      if (!validateForm()) return;
       endPoint = 'emailSignUp';
       bodyObject.name = e.target.name.value;
     }
@@ -105,7 +102,13 @@ function LoginPage(props) {
     }).then((res) => res.json()).then(async (user) => {
       if (user.error) {
         // Show an alert to the user
-        Alert(user.error, 'danger', 'loginAlertPlaceHolder');
+        let toast;
+        if (user.error === 'Email Already Taken') {
+          toast = new bootstrap.Toast(document.getElementById('emailTakenToast'));
+        } else {
+          toast = new bootstrap.Toast(document.getElementById('invalidCredentialsToast'));
+        }
+        toast.show();
         if (e.target.id === 'login-form') document.getElementById('password').focus();
         else document.getElementById('email').focus();
         return;
@@ -115,6 +118,9 @@ function LoginPage(props) {
       $('.sidePanel').animate({ width: '0px' });
       await dispatch(fetchUserData());
       await dispatch(setLoggedInState(true));
+    }).catch(() => {
+      const toast = new bootstrap.Toast(document.getElementById('loginFailedToast'));
+      toast.show();
     });
   };
   const verifyEmail = (e) => {
@@ -170,7 +176,45 @@ function LoginPage(props) {
   const { formForLogin } = props;
   return (
     <div className="App">
-      <div id="loginAlertPlaceHolder" />
+      <div className="toast-container position-fixed end-0 p-3 toast-sm-bottom">
+        <div
+          id="loginFailedToast"
+          className="toast m-0 w-100"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-body d-flex align-items-center bg-danger text-light w-100">
+            Login Failed!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed end-0 p-3 toast-sm-bottom">
+        <div
+          id="invalidCredentialsToast"
+          className="toast m-0 w-100"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-body d-flex align-items-center bg-danger text-light w-100">
+            Invalid Username or Password!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed end-0 p-3 toast-sm-bottom">
+        <div
+          id="emailTakenToast"
+          className="toast m-0 w-100"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-body d-flex align-items-center bg-danger text-light w-100">
+            Email Address Already Taken!
+          </div>
+        </div>
+      </div>
       <div className="app-name">
         <h1>UpTravel</h1>
         <p>Share Your Experiences with the world</p>
@@ -257,7 +301,8 @@ function LoginPage(props) {
             onSuccess={loggedIn}
             width="300px"
             onError={() => {
-              Alert('Login Failed', 'danger', 'loginAlertPlaceHolder');
+              const toast = new bootstrap.Toast(document.getElementById('loginFailedToast'));
+              toast.show();
             }}
             text="continue_with"
           />

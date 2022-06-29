@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
-import Alert from '../../components/Alert/Alert';
 import { serverAddress } from '../../redux/loginSlice';
 
 export default function UpdateCredentials(props) {
@@ -32,14 +31,6 @@ export default function UpdateCredentials(props) {
 
   const submitForm = (e) => {
     e.preventDefault();
-    if (!passwordVerified) {
-      const toast = new bootstrap.Toast(document.getElementById('providePasswordToast'));
-      toast.show();
-      return;
-    }
-    const updateToast = new bootstrap.Toast(document.getElementById('updatingPasswordToast'));
-    updateToast.show();
-
     const newCredentials = {
       newPassword,
     };
@@ -58,10 +49,12 @@ export default function UpdateCredentials(props) {
         }, 1000);
         navigate('/profile');
       } else {
-        Alert('Profile Update Failed', 'danger', 'settingsAlert', 'Error ');
+        const toast = new bootstrap.Toast(document.getElementById('passwordUpdateFailedToast'));
+        toast.show();
       }
     }).catch(() => {
-      Alert('Password Update Failed!', 'danger', 'settingsAlert', 'Error ');
+      const toast = new bootstrap.Toast(document.getElementById('passwordUpdateFailedToast'));
+      toast.show();
     });
   };
 
@@ -112,20 +105,12 @@ export default function UpdateCredentials(props) {
   return (
     <div className="settingsPage p-3">
       <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
-        <div id="providePasswordToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-warning text-dark fw-bold">
-            Provide a valid Password!
+        <div id="passwordUpdateFailedToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-danger text-light fw-bold">
+            Password Update Failed!
           </div>
         </div>
       </div>
-      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
-        <div id="updatingPasswordToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
-          <div className="toast-body d-flex align-items-center bg-color2 text-light fw-bold">
-            Updating Password...
-          </div>
-        </div>
-      </div>
-      <div id="settingsAlert" />
       <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
         <div className="form-group mb-3">
           Enter New Password
@@ -154,7 +139,7 @@ export default function UpdateCredentials(props) {
           </span>
         </div>
         <div className="btn-group mt-3 align-self-end" role="group">
-          <button type="submit" className="btn btn-danger px-4">Update</button>
+          <button type="submit" className="btn btn-danger px-4" disabled={!passwordVerified}>Update</button>
         </div>
       </form>
     </div>

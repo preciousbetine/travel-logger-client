@@ -13,7 +13,6 @@ import Search from '../search/search';
 import Profile from '../profile/profile';
 import NewExperience from '../newExperience/newExperience';
 import AllSettings, { EditProfile } from '../settings/settings';
-import Alert from '../../components/Alert/Alert';
 import './dashboard.css';
 import UpdateCredentials from '../updateCredentials/updateCredentials';
 
@@ -149,7 +148,8 @@ function Dashboard() {
       .then((res) => res.json()).then((res) => {
         setRandomUsers(res.users);
       }).catch(() => {
-        Alert('An Error Occured', 'danger', 'dashboardAlertPlaceHolder');
+        const toast = new bootstrap.Toast(document.getElementById('dashboardErrorToast'));
+        toast.show();
       });
   }, []);
 
@@ -160,6 +160,19 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <SideBar />
+      <div className="toast-container position-fixed end-0 p-3 toast-sm">
+        <div
+          id="dashboardErrorToast"
+          className="toast m-0 w-100"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+        >
+          <div className="toast-body d-flex align-items-center bg-danger text-light w-100">
+            An Error Occured!
+          </div>
+        </div>
+      </div>
       <div className="modal fade" id="newPostModal" tabIndex="-1" aria-labelledby="postExperienceLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
           <div className="modal-content">
@@ -173,7 +186,6 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      <div id="dashboardAlertPlaceHolder" />
       <div className="mainPage">
         <EditProfile />
         <div className="page-header align-items-center px-3 font-20">
