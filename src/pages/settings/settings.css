@@ -1,9 +1,6 @@
 
 .settingsPage {
   position: relative;
-  /* height: calc(100vh - 70px); */
-  height: 10px;
-  margin-top: 70px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -11,12 +8,16 @@
 }
 
 .settingItem {
-  padding: 10px;
+  padding: 10px 20px;
   width: 100%;
-  margin-bottom: 10px;
   cursor: pointer;
   font-size: 20px;
-  text-decoration: underline;
+  color: white;
+  background:  var(--bs-dark);
+}
+
+.settingItem:hover {
+  background: rgb(92, 173, 15);;
 }
 
 .editCoverImage {

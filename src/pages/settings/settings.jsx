@@ -14,8 +14,10 @@ function AllSettings(props) {
   const navigate = useNavigate();
   const server = useSelector(serverAddress);
   const { setHeader } = props;
+
   const nav = (
-    <div className="w-100 h-100 d-flex align-items-center">
+    <div className="d-flex align-items-center h-100">
+      <i className="fa-solid fa-gear me-3 text-color2 font-20" />
       <Link to="/settings" className="text-dark text-decoration-none">Settings</Link>
     </div>
   );
@@ -39,13 +41,36 @@ function AllSettings(props) {
   };
   return (
     <div className="settingsPage">
+      <div className="modal fade" id="logOutModal" tabIndex="-1" aria-labelledby="deleteExperienceLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content mw-300 m-auto">
+            <div className="modal-body">
+              <h3 className="my-3">Log Out?</h3>
+              <button type="button" className="w-100 btn btn-white rounded-pill border-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" className="w-100 btn bg-red text-white mt-2 rounded-pill" data-bs-dismiss="modal" onClick={logOut}>Log Out</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <LinkContainer to={editProfilePage}>
         <div className="settingItem">Edit Profile</div>
       </LinkContainer>
       <LinkContainer to="/settings/updateCredentials">
         <div className="settingItem">Change Password</div>
       </LinkContainer>
-      <div className="settingItem" role="button" onClick={logOut} onKeyPress={logOut} tabIndex="0">Log Out</div>
+      <div
+        className="settingItem"
+        role="button"
+        onClick={() => {
+          const modal = new bootstrap.Modal(document.getElementById('logOutModal'));
+          modal.show();
+        }}
+        onKeyPress={() => {}}
+        tabIndex="0"
+      >
+        Log Out
+
+      </div>
     </div>
   );
 }

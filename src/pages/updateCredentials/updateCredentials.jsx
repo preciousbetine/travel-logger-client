@@ -16,11 +16,14 @@ export default function UpdateCredentials(props) {
   const [passwordVerified, setPasswordVerified] = useState(false);
 
   const nav = (
-    <>
+    <div className="d-flex align-items-center h-100">
+      <button className="btn btn-link p-0 ps-2" type="button" onClick={() => { navigate(-1); }}>
+        <i className="fa-solid fa-arrow-left-long me-3 text-color2 font-20" />
+      </button>
       <Link to="/settings" className="text-dark me-1 text-decoration-none">Settings</Link>
       <span className="text-dark">/</span>
       <Link to="/settings/updateCredentials" className="text-dark ms-1">Change Password</Link>
-    </>
+    </div>
   );
 
   useEffect(() => {
@@ -30,10 +33,13 @@ export default function UpdateCredentials(props) {
   const submitForm = (e) => {
     e.preventDefault();
     if (!passwordVerified) {
-      Alert('Please provide a valid password', 'warning', 'settingsAlert');
+      const toast = new bootstrap.Toast(document.getElementById('providePasswordToast'));
+      toast.show();
       return;
     }
-    Alert('Updating Password', 'dark', 'settingsAlert');
+    const updateToast = new bootstrap.Toast(document.getElementById('updatingPasswordToast'));
+    updateToast.show();
+
     const newCredentials = {
       newPassword,
     };
@@ -104,7 +110,21 @@ export default function UpdateCredentials(props) {
   };
 
   return (
-    <div className="settingsPage">
+    <div className="settingsPage p-3">
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="providePasswordToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-warning text-dark fw-bold">
+            Provide a valid Password!
+          </div>
+        </div>
+      </div>
+      <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
+        <div id="updatingPasswordToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
+          <div className="toast-body d-flex align-items-center bg-color2 text-light fw-bold">
+            Updating Password...
+          </div>
+        </div>
+      </div>
       <div id="settingsAlert" />
       <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
         <div className="form-group mb-3">
