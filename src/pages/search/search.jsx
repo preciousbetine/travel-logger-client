@@ -27,6 +27,15 @@ function Search(props) {
     </div>
   );
 
+  const userNav = (
+    <div className="d-flex align-items-center h-100">
+      <button className="btn btn-link p-0 ps-2" type="button" onClick={() => { navigate(-1); }}>
+        <i className="fa-solid fa-arrow-left-long me-3 text-color2 font-20" />
+      </button>
+      <Link to="/search" className="text-dark text-decoration-none h3 m-0 font-20">Find Other Travellers</Link>
+    </div>
+  );
+
   useEffect(() => {
     async function work() {
       let res = await fetch(`${server}/user/${id}`);
@@ -49,8 +58,10 @@ function Search(props) {
   }, [id]);
 
   useEffect(() => {
-    setHeader(nav);
-  }, []);
+    if (id) {
+      setHeader(userNav);
+    } else setHeader(nav);
+  }, [id]);
 
   const onScroll = (e) => {
     if (search.trim().length === 0) return;
@@ -168,6 +179,8 @@ function Search(props) {
                               datePosted={experience.datePosted}
                               experienceName={experience.experienceName}
                               images={experience.images}
+                              userName={user.name}
+                              userImage={user.picture}
                               description={experience.description}
                               deleteExperience={() => {}}
                               showDeleteOption={false}

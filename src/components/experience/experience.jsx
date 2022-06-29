@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { serverAddress } from '../../redux/loginSlice';
 
 import './experience.css';
-import { userData } from '../../redux/userDataSlice';
 
 function Experience(props) {
   const {
@@ -14,9 +13,10 @@ function Experience(props) {
     images,
     deleteExperience,
     showDeleteOption,
+    userName,
+    userImage,
   } = props;
   const server = useSelector(serverAddress);
-  const user = useSelector(userData);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const date = new Date(datePosted);
   const dateString = `${date.getDate()} 
@@ -28,11 +28,11 @@ function Experience(props) {
     <tr className="experience">
       <td>
         <div className="d-flex p-2 pt-0 border-bottom">
-          <img className="postProfilePicture me-3" alt="" src={`${server}/photo/${user.picture}`} />
+          <img className="postProfilePicture me-3" alt="" src={`${server}/photo/${userImage}`} />
           <div className="w-100">
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h4 className="font-15 m-0">{user.name}</h4>
+                <h4 className="font-15 m-0">{userName}</h4>
                 <h4 className="font-13 fw-normal">{dateString}</h4>
               </div>
               {
@@ -80,6 +80,8 @@ Experience.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.string.isRequired,
   ).isRequired,
+  userName: PropTypes.string.isRequired,
+  userImage: PropTypes.string.isRequired,
   experienceName: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   deleteExperience: PropTypes.func.isRequired,

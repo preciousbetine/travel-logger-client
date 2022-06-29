@@ -197,6 +197,8 @@ function Profile(props) {
                           images={experience.images}
                           postId={experience.postId}
                           description={experience.description}
+                          userName={user.name}
+                          userImage={user.picture}
                           deleteExperience={() => {
                             setExperienceToDelete(experience.postId);
                             const modal = new bootstrap.Modal(document.getElementById('deleteExperienceDialog'));
