@@ -220,7 +220,7 @@ function Dashboard() {
                 <img
                   alt=""
                   className="smallImg me-3 border border-light"
-                  src={`${server}/photo/${user.picture}`}
+                  src={user.picture.startsWith('https://lh3.googleusercontent.com') ? user.picture : `${server}/photo/${user.picture}`}
                 />
               </span>
               <span className="d-flex flex-column align-items-start">
