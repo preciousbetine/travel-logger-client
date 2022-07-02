@@ -223,7 +223,7 @@ function Search(props) {
                     <img
                       alt=""
                       className="resultImage me-3 border border-light"
-                      src={`${server}/photo/${result.picture}`}
+                      src={result.picture.startsWith('https://lh3.googleusercontent.com') ? result.picture : `${server}/photo/${result.picture}`}
                     />
                     <span className="d-flex flex-column align-items-start">
                       <span>{result.name}</span>
