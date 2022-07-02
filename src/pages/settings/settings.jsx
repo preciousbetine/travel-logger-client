@@ -88,7 +88,7 @@ export function EditProfile() {
   const [newUserWebsite, setNewUserWebsite] = useState('');
   const [newUserBio, setNewUserBio] = useState('');
   const [saving, setSavingState] = useState(false);
-  const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
+  const [profilePicSrc, setProfilePicSrc] = useState(user.picture.startsWith('https://lh3.googleusercontent.com') ? user.picture : `${server}/photo/${user.picture}`);
 
   const submitForm = () => {
     setSavingState(true);

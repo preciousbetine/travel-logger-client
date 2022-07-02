@@ -139,7 +139,7 @@ function Profile(props) {
             <>
               <div className="coverImage bg-color2">
                 <img
-                  src={user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'}
+                  src={user.picture.startsWith('https://lh3.googleusercontent.com') ? user.picture : `${server}/photo/${user.picture}`}
                   alt=""
                   className="userImage bg-white"
                 />
