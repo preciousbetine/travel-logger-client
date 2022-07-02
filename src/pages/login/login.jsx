@@ -216,8 +216,8 @@ function LoginPage(props) {
         </div>
       </div>
       <div className="app-name">
-        <h1>UpTravel</h1>
-        <p>Share Your Experiences with the world</p>
+        <h1 className="m-0">UpTravel</h1>
+        <p className="m-0">Share Your Experiences with the world</p>
       </div>
       <div className="sidePanel" />
       <div className="loginPanel">

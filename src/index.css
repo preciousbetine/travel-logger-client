@@ -28,6 +28,10 @@ body {
   height: 70px;
 }
 
+.w-80 {
+  width: 80% !important;
+}
+
 .content-only, .content-only:focus {
   border: none !important;
   outline: none !important;
@@ -104,4 +108,14 @@ body {
 .focus-border-color2:focus-within {
   border-color: rgb(92, 173, 15) !important; 
   color: rgb(92, 173, 15) !important;
+}
+
+button.bg-red:hover {
+  background: black;
+  border: 2px solid white;
+}
+button.btn-white:hover {
+  background: black;
+  border: 2px solid white;
+  color: white !important;
 }

@@ -87,9 +87,11 @@ export function EditProfile() {
   const [newUserLocation, setNewUserLocation] = useState('');
   const [newUserWebsite, setNewUserWebsite] = useState('');
   const [newUserBio, setNewUserBio] = useState('');
+  const [saving, setSavingState] = useState(false);
   const [profilePicSrc, setProfilePicSrc] = useState(user.picture ? `${server}/photo/${user.picture}` : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png');
 
   const submitForm = () => {
+    setSavingState(true);
     const newProfileInfo = {
       newUserName,
       newUserLocation,
@@ -112,15 +114,18 @@ export function EditProfile() {
         setTimeout(() => {
           const toast = new bootstrap.Toast(document.getElementById('profileUpdatedToast'));
           toast.show();
+          setSavingState(false);
         }, 1000);
         navigate('/profile');
       } else {
         const toast = new bootstrap.Toast(document.getElementById('profileUpdateFailedToast'));
         toast.show();
+        setSavingState(false);
       }
     }).catch(() => {
       const toast = new bootstrap.Toast(document.getElementById('profileUpdateFailedToast'));
       toast.show();
+      setSavingState(false);
     });
   };
 
@@ -208,7 +213,11 @@ export function EditProfile() {
                 <i className="fa-solid fa-arrow-left-long" />
               </button>
               <h3 className="m-0 ms-4 me-auto font-20 text-black">Edit profile</h3>
-              <button type="button" className="btn btn-black px-4 rounded-pill" onClick={submitForm}>Save</button>
+              <button type="button" className="btn btn-black px-4 rounded-pill" onClick={submitForm}>
+                {
+                  saving ? 'Saving...' : 'Save'
+                }
+              </button>
             </div>
             <div
               className="editCoverImage bg-color2"

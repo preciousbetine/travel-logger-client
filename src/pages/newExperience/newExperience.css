@@ -10,24 +10,25 @@
   border: none;
 }
 
-.removeImageButton {
-  right: 40px;
-  margin-top: 10px;
-  font-size: 10px;
+.textarea {
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 1px 6px;
+  width: 100%;
 }
 
-#postingExperienceAlert {
-  position: fixed;
-  top: 10px;
-  left: 50vw;
-  transform: translateX(-50%);
+.textarea[contenteditable]:empty::before {
+  content: "Describe your experience...";
+  color: var(--bs-secondary);
 }
 
-.removeImageButton1 {
-  right: 50%;
-  margin-top: 10px;
-  margin-right: 10px;
-  font-size: 10px;
+.right-10px {
+  right: 10px;
+}
+
+.right-25px {
+  right: 25px;
 }
 
 li {
@@ -41,10 +42,17 @@ li {
   object-fit: cover;
 }
 
+#user-image-new-post {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 #oneImageHolder, #twoImagesHolder {
   border-radius: 20px;
   width: 100%;
-  height: 300px;
+  height: 200px;
   display: flex;
 }
 
@@ -52,12 +60,14 @@ li {
   width: 50%;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+  position: relative;
 }
 
 #two-pics-image-2 {
   width: 50%;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
+  position: relative;
 }
 
 #new-post-image-1 {
@@ -73,17 +83,4 @@ li {
   object-fit: cover;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;  
-}
-
-@media only screen and (max-width: 576px) {
-  #postControl {
-    position: fixed;
-    margin: auto;
-    bottom: 16px;
-    border-radius: 5px;
-    left: 50vw;
-    transform: translateX(-50%);
-    background: var(--bs-dark);
-    padding: 10px;
-  }
 }

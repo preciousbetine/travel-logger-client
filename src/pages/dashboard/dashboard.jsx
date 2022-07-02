@@ -174,13 +174,17 @@ function Dashboard() {
         </div>
       </div>
       <div className="modal fade" id="newPostModal" tabIndex="-1" aria-labelledby="postExperienceLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-fullscreen-sm-down">
+        <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered">
           <div className="modal-content">
-            <div className="modal-header bg-dark text-light">
-              <h5 className="modal-title" id="postExperienceLabel">Post A New Experience</h5>
-              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" />
+            <div className="modal-header">
+              <div className="d-flex align-items-center h-100 justify-content-between w-100">
+                <h5 className="text-dark m-0">New Post</h5>
+                <button className="btn btn-link m-0 p-0" title="Close" type="button" data-bs-dismiss="modal">
+                  <i className="fa-solid fa-circle-xmark text-color2 font-20" />
+                </button>
+              </div>
             </div>
-            <div className="modal-body bg-dark text-light">
+            <div className="modal-body p-0">
               <NewExperience />
             </div>
           </div>

@@ -43,7 +43,7 @@ function Experience(props) {
                 ) : null
               }
             </div>
-            <div>
+            <div className="text-break">
               { experienceName ? (
                 <strong>
                   {experienceName}
