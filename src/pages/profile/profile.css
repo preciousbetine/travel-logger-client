@@ -1,8 +1,11 @@
 
 .profilePage {
   position: relative;
-  height: calc(100vh - 70px);
-  overflow-y: auto;
+  height: max-content;
+}
+
+.profile {
+  width: 600px;
 }
 
 .experienceHeader {
@@ -13,18 +16,18 @@
 }
 
 .coverImage {
-  height: 90px;
-  margin-bottom: 10px;
+  height: 150px;
   width: 100%;
+  margin-bottom: 15px;
 }
 
 .userImage {
-  height: 80px;
-  width: 80px;
+  height: 100px;
+  width: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-left: 20px;
-  margin-top: 50px;
+  margin-left: 10px;
+  margin-top: 100px;
   border: 2px solid white;
 }
 
@@ -41,13 +44,15 @@
 
 @media only screen and (min-width: 550px) {
   .coverImage {
-    height: 150px;
+    height: 200px;
+    margin-bottom: 40px;
   }
 
   .userImage {
-    height: 100px;
-    width: 100px;
-    margin-top: 100px;
+    height: 150px;
+    width: 150px;
+    border-width: 3px;
+    margin-top: 130px;
   }
 }
 
@@ -58,7 +63,7 @@
     left: 0px;
     width: 100vw;
   }
-  .profilePage {
-    height: calc(100vh - 120px);
+  .profile {
+    width: 100%;
   }
 }

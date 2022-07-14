@@ -51,24 +51,28 @@ function AllSettings(props) {
           </div>
         </div>
       </div>
-      <LinkContainer to={editProfilePage}>
-        <div className="settingItem">Edit Profile</div>
-      </LinkContainer>
-      <LinkContainer to="/settings/updateCredentials">
-        <div className="settingItem">Change Password</div>
-      </LinkContainer>
-      <div
-        className="settingItem"
-        role="button"
-        onClick={() => {
-          const modal = new bootstrap.Modal(document.getElementById('logOutModal'));
-          modal.show();
-        }}
-        onKeyPress={() => {}}
-        tabIndex="0"
-      >
-        Log Out
-
+      <div className="settings">
+        <LinkContainer to={editProfilePage}>
+          <div className="settingItem">
+            <h4>Edit Profile</h4>
+            <p className="m-0">Change your name, location, website and bio</p>
+          </div>
+        </LinkContainer>
+        <LinkContainer to="/settings/updateCredentials">
+          <div className="settingItem">Change Password</div>
+        </LinkContainer>
+        <div
+          className="settingItem"
+          role="button"
+          onClick={() => {
+            const modal = new bootstrap.Modal(document.getElementById('logOutModal'));
+            modal.show();
+          }}
+          onKeyPress={() => {}}
+          tabIndex="0"
+        >
+          Log Out
+        </div>
       </div>
     </div>
   );

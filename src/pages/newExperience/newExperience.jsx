@@ -144,7 +144,7 @@ class NewExperience extends React.Component {
               <textarea
                 className="w-100 content-only fw-normal mb-2"
                 style={{ resize: 'none' }}
-                placeholder="Share your experience..."
+                placeholder="What's on your mind..."
                 value={description}
                 onChange={(e) => {
                   if (e.key === 'Enter') e.preventDefault();

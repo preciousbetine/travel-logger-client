@@ -7,13 +7,17 @@
   overflow-y: auto;
 }
 
+.settings {
+  width: 600px;
+}
+
 .settingItem {
   padding: 10px 20px;
   width: 100%;
   cursor: pointer;
-  font-size: 20px;
-  color: white;
-  background:  var(--bs-dark);
+  /* font-size: 20px; */
+  /* color: white; */
+  /* background:  var(--bs-dark); */
 }
 
 .settingItem:hover {
@@ -52,7 +56,7 @@
   display: flex !important;
 }
 
-@media only screen and (min-width: 550px) {
+@media only screen and (min-width: 690px) {
   .editCoverImage {
     height: 200px;
     margin-bottom: 75px;
@@ -71,11 +75,14 @@
   }
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 690px) {
   .toast-sm-bottom {
     bottom: 0px !important;
     padding: 0px !important;
     left: 0px;
     width: 100vw;
+  }
+  .settings {
+    width: 100%;
   }
 }

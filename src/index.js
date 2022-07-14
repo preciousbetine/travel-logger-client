@@ -12,7 +12,8 @@ import { fetchUserData } from './redux/userDataSlice';
 // Here, loginSlice.js and userDataSlice.js
 
 const start = async () => {
-  await store.dispatch(setServerAddress('https://travel-logger-server.herokuapp.com'));
+  // await store.dispatch(setServerAddress('https://travel-logger-server.herokuapp.com'));
+  await store.dispatch(setServerAddress('http://localhost:5000'));
   await store.dispatch(checkLoggedInState());
   if (store.getState().login.loggedIn) await store.dispatch(fetchUserData());
   const root = ReactDOM.createRoot(document.getElementById('root'));

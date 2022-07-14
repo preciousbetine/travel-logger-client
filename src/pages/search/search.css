@@ -2,8 +2,9 @@
 .searchPage {
   position: relative;
   height: calc(100vh - 70px);
-  /* padding: 30px; */
-  overflow-y: auto;
+  width: 600px;
+  /* overflow-y: auto; */
+  height: max-content;
 }
 
 .resultImage {
@@ -18,8 +19,17 @@
   padding: .6rem !important;
 }
 
-@media only screen and (max-width: 550px) {
+.search-icon {
+  color: var(--bs-secondary);
+}
+
+.search-user-div:focus-within .search-icon {
+  color: black !important;
+}
+
+@media only screen and (max-width: 690px) {
   .searchPage {
-    height: calc(100vh - 120px);
+    /* height: calc(100vh - 120px); */
+    width: 100%;
   }
 }

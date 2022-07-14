@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { serverAddress } from '../../redux/loginSlice';
+import './updateCredentials.css';
 
 export default function UpdateCredentials(props) {
   const { setHeader } = props;
@@ -111,7 +112,7 @@ export default function UpdateCredentials(props) {
           </div>
         </div>
       </div>
-      <form className="w-100 d-flex flex-column" onSubmit={submitForm}>
+      <form className="updatePasswordForm d-flex flex-column" onSubmit={submitForm}>
         <div className="form-group mb-3">
           Enter New Password
           <input

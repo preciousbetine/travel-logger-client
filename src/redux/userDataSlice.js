@@ -2,7 +2,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const server = 'https://travel-logger-server.herokuapp.com';
+// const server = 'https://travel-logger-server.herokuapp.com';
+const server = 'http://localhost:5000';
 const initialState = {
   ready: false,
 };
