@@ -17,7 +17,7 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route path="/login" element={loggedInUser ? <Navigate replace to="/" /> : <Login formForLogin />} />
+          <Route path="/login" element={loggedInUser ? <Navigate replace to="/home" /> : <Login formForLogin />} />
           <Route path="/*" element={loggedInUser ? <Dashboard /> : <Navigate replace to="/login" />} />
         </Routes>
       </Router>

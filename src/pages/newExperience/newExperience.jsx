@@ -205,14 +205,14 @@ class NewExperience extends React.Component {
           </div>
           <div className="d-flex justify-content-between mt-3" id="postControl">
             <button
-              className="btn btn-light border-dark me-3"
+              className="btn btn-light me-3"
               type="button"
               title="Add Images"
               onClick={this.addImages}
             >
               <i className="fa fa-image" />
             </button>
-            <button className="btn btn-light border-dark" type="button" title="Post Experience" onClick={this.makePost} disabled={(description.length === 0 && images.length === 0) || postingExperience}>
+            <button className="btn bg-color2 text-light" type="button" title="Post Experience" onClick={this.makePost} disabled={(description.length === 0 && images.length === 0) || postingExperience}>
               {
                 postingExperience ? 'Posting...' : 'Post'
               }

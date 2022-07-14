@@ -33,6 +33,22 @@ class UserProfile extends React.Component {
     window.addEventListener('scroll', this.onScroll);
   }
 
+  async componentDidUpdate(prevProps) {
+    const { server, id } = this.props;
+    if (prevProps.id !== id) {
+      console.log(prevProps.id, id);
+      this.setState({ pageReady: false });
+      let res = await fetch(`${server}/${id}/experiences?index=${0}`);
+      res = await res.json();
+      if (res.experiences.length) {
+        this.setState({
+          currentIndex: 10,
+        });
+      }
+      this.setState({ pageReady: true, experiences: res.experiences });
+    }
+  }
+
   componentWillUnmount() {
     window.removeEventListener('scroll', this.onScroll);
   }
