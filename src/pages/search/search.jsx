@@ -1,6 +1,7 @@
 /* global bootstrap */
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Experience from '../../components/experience/experience';
@@ -15,13 +16,19 @@ class UserProfile extends React.Component {
       experiences: [],
       pageReady: false,
       currentIndex: 0,
+      following: false,
     };
     this.onScroll = this.onScroll.bind(this);
+    this.followUser = this.followUser.bind(this);
   }
 
   async componentDidMount() {
     const { server, id } = this.props;
-    let res = await fetch(`${server}/${id}/experiences?index=${0}`);
+    // Check if the currently logged in user is following this user
+    let res = await fetch(`${server}/checkFollowing/${id}`, { credentials: 'include' });
+    res = await res.json();
+    this.setState(res);
+    res = await fetch(`${server}/${id}/experiences?index=${0}`);
     res = await res.json();
     if (res.experiences.length) {
       this.setState({
@@ -38,7 +45,10 @@ class UserProfile extends React.Component {
     if (prevProps.id !== id) {
       console.log(prevProps.id, id);
       this.setState({ pageReady: false });
-      let res = await fetch(`${server}/${id}/experiences?index=${0}`);
+      let res = await fetch(`${server}/checkFollowing/${id}`, { credentials: 'include' });
+      res = await res.json();
+      this.setState(res);
+      res = await fetch(`${server}/${id}/experiences?index=${0}`);
       res = await res.json();
       if (res.experiences.length) {
         this.setState({
@@ -76,6 +86,27 @@ class UserProfile extends React.Component {
     }
   }
 
+  async followUser() {
+    const { server, id, reloadUser } = this.props;
+    const { following } = this.state;
+    if (!following) {
+      let res = await fetch(`${server}/followUser/${id}`, {
+        credentials: 'include',
+      });
+      res = await res.json();
+      if (res.success) this.setState({ following: true });
+    } else {
+      let res = await fetch(`${server}/unfollowUser/${id}`, {
+        credentials: 'include',
+      });
+      res = await res.json();
+      if (res.success) this.setState({ following: false });
+    }
+    let res = await fetch(`${server}/user/${id}`);
+    res = await res.json();
+    reloadUser(res);
+  }
+
   render() {
     const {
       userPicture,
@@ -83,9 +114,11 @@ class UserProfile extends React.Component {
       userDescription,
       userLocation,
       userWebsite,
+      userFollowers,
+      userFollowing,
       server,
     } = this.props;
-    const { experiences, pageReady } = this.state;
+    const { experiences, pageReady, following } = this.state;
     return (
       <>
         <div className="profileDiv">
@@ -97,7 +130,17 @@ class UserProfile extends React.Component {
             />
           </div>
           <div className="mt-5 ps-4 d-flex pb-3 flex-column justify-content-center align-items-start">
-            <h4 className="m-0 mt-5">{userName}</h4>
+            <button
+              type="button"
+              onClick={this.followUser}
+              className={`btn border border-2 rounded-pill align-self-end me-2 px-4 ${following ? 'btn-black' : 'btn-light'}`}
+              id="followUserButton"
+            >
+              {
+                following ? 'Unfollow' : 'Follow'
+              }
+            </button>
+            <h4 className="m-0 mt-4">{userName}</h4>
             <h5 className="text-secondary m-0 font-15">Joined 2022</h5>
             <div className="text-secondary p-3 ps-0">{userDescription}</div>
             <div className="infoDisplay mb-1">
@@ -117,6 +160,22 @@ class UserProfile extends React.Component {
                   </div>
                 ) : null
               }
+              <div className="mt-2">
+                <LinkContainer to="/followers">
+                  <span role="button" className="me-2 hover-underline">
+                    <span className="fw-bold">{userFollowers}</span>
+                    {' '}
+                    <span>Followers</span>
+                  </span>
+                </LinkContainer>
+                <LinkContainer to="/followers">
+                  <span role="button" className="hover-underline">
+                    <span className="fw-bold">{userFollowing}</span>
+                    {' '}
+                    <span>Following</span>
+                  </span>
+                </LinkContainer>
+              </div>
             </div>
           </div>
         </div>
@@ -234,9 +293,6 @@ function Search(props) {
           onChange={searchDatabase}
         />
       </div>
-      {/* <i className="fa-solid fa-briefcase me-3 text-color2 font-20" /> */}
-      {/* <Link to="/search" className="text-dark text-decorati
-      on-none h3 m-0 font-20">Find Other Users</Link> */}
     </div>
   );
 
@@ -276,9 +332,12 @@ function Search(props) {
               userPicture={user.picture}
               userDescription={user.description}
               userWebsite={user.website}
+              userFollowing={user.following.length}
+              userFollowers={user.followers.length}
               server={server}
               id={id}
               search={search}
+              reloadUser={setUser}
             />
           ) : <Loader />
         }
@@ -326,9 +385,12 @@ UserProfile.propTypes = {
   userPicture: PropTypes.string.isRequired,
   userDescription: PropTypes.string.isRequired,
   userWebsite: PropTypes.string.isRequired,
+  userFollowers: PropTypes.number.isRequired,
+  userFollowing: PropTypes.number.isRequired,
   server: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   search: PropTypes.string.isRequired,
+  reloadUser: PropTypes.func.isRequired,
 };
 
 export default Search;

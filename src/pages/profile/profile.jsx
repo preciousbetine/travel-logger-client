@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { userData } from '../../redux/userDataSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { userData, fetchUserData } from '../../redux/userDataSlice';
 import Experience from '../../components/experience/experience';
 import Loader from '../../components/loader/loader';
 import './profile.css';
@@ -30,7 +30,9 @@ class Profile extends React.Component {
       userName,
       userLocation,
       server,
+      dispatch,
     } = this.props;
+    dispatch(fetchUserData());
     const { currentIndex, experiences } = this.state;
     const nav = (
       <div className="d-flex align-items-center h-100">
@@ -114,6 +116,8 @@ class Profile extends React.Component {
       userDescription,
       userWebsite,
       userLocation,
+      userFollowers,
+      userFollowing,
       server,
     } = this.props;
 
@@ -207,6 +211,22 @@ class Profile extends React.Component {
                         </div>
                       ) : null
                     }
+                    <div className="mt-2">
+                      <LinkContainer to="/followers">
+                        <span role="button" className="me-2 hover-underline">
+                          <span className="fw-bold">{userFollowers}</span>
+                          {' '}
+                          <span>Followers</span>
+                        </span>
+                      </LinkContainer>
+                      <LinkContainer to="/followers">
+                        <span role="button" className="hover-underline">
+                          <span className="fw-bold">{userFollowing}</span>
+                          {' '}
+                          <span>Following</span>
+                        </span>
+                      </LinkContainer>
+                    </div>
                   </div>
                 </div>
               </>
@@ -291,6 +311,7 @@ class Profile extends React.Component {
 
 function ProfileContainer(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector(userData);
   const server = useSelector(serverAddress);
 
@@ -304,8 +325,11 @@ function ProfileContainer(props) {
       userPicture={user.picture}
       userDescription={user.description}
       userWebsite={user.website}
+      userFollowers={user.followersCount}
+      userFollowing={user.followingCount}
       server={server}
       navigate={navigate}
+      dispatch={dispatch}
     />
   );
 }
@@ -322,8 +346,11 @@ Profile.propTypes = {
   userPicture: PropTypes.string.isRequired,
   userDescription: PropTypes.string.isRequired,
   userWebsite: PropTypes.string.isRequired,
+  userFollowers: PropTypes.number.isRequired,
+  userFollowing: PropTypes.number.isRequired,
   server: PropTypes.string.isRequired,
   navigate: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default ProfileContainer;

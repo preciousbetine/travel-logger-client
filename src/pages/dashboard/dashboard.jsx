@@ -251,7 +251,7 @@ function Dashboard() {
       <div className="rightSideBar">
         <div className="discover pt-3">
           <h4 className="font-20 fw-bold mb-4 px-3">Discover Other Users</h4>
-          { randomUsers.slice(0, 3).map((user, index) => (
+          { randomUsers.map((user, index) => (
             <div
               key={user.id}
               className="w-100 d-flex align-items-center user-tile px-3 py-2"
