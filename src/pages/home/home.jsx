@@ -17,9 +17,11 @@ class Home extends React.Component {
       posts: [],
       loading: true,
     };
+    this.onScroll = this.onScroll.bind(this);
   }
 
   componentDidMount() {
+    window.addEventListener('scroll', this.onScroll);
     const { setHeader, server } = this.props;
     const { currentIndex, posts } = this.state;
     const nav = (
@@ -37,14 +39,41 @@ class Home extends React.Component {
           posts: [...posts, ...(res.posts.map((post) => post.post))],
           loading: false,
         });
-      }).catch((e) => {
-        console.log(e);
+      }).catch(() => {
         const toast = new bootstrap.Toast(document.getElementById('errorToast'));
         toast.show();
         this.setState({
           loading: false,
         });
       });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+  }
+
+  onScroll() {
+    const { currentIndex, posts } = this.state;
+    const { server } = this.props;
+    if (
+      document.documentElement.scrollHeight - document.documentElement.scrollTop
+    <= (document.documentElement.clientHeight + 10)
+    ) {
+      fetch(`${server}/timeline?index=${currentIndex}`, {
+        credentials: 'include',
+      })
+        .then((res) => res.json()).then((res) => {
+          if (res.posts.length) {
+            this.setState({
+              currentIndex: currentIndex + 20,
+              posts: [...posts, ...(res.posts.map((post) => post.post))],
+            });
+          }
+        }).catch(() => {
+          const toast = new bootstrap.Toast(document.getElementById('errorToast'));
+          toast.show();
+        });
+    }
   }
 
   render() {

@@ -43,7 +43,6 @@ class UserProfile extends React.Component {
   async componentDidUpdate(prevProps) {
     const { server, id } = this.props;
     if (prevProps.id !== id) {
-      console.log(prevProps.id, id);
       this.setState({ pageReady: false });
       let res = await fetch(`${server}/checkFollowing/${id}`, { credentials: 'include' });
       res = await res.json();

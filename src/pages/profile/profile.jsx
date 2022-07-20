@@ -21,6 +21,7 @@ class Profile extends React.Component {
       experienceToDelete: '',
     };
     this.onScroll = this.onScroll.bind(this);
+    this.deleteExperience = this.deleteExperience.bind(this);
   }
 
   componentDidMount() {
