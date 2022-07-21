@@ -19,7 +19,7 @@
 }
 
 .textarea[contenteditable]:empty::before {
-  content: "Describe your experience...";
+  content: "Whats on your mind...";
   color: var(--bs-secondary);
 }
 

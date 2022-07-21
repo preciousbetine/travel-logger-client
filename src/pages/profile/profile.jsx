@@ -144,7 +144,7 @@ class Profile extends React.Component {
         <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
           <div id="deleteToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
             <div className="toast-body d-flex align-items-center bg-color2 text-light">
-              Experience Deleted!
+              Post Deleted!
             </div>
           </div>
         </div>
@@ -172,7 +172,7 @@ class Profile extends React.Component {
         <div className="toast-container position-fixed bottom-0 end-0 p-3 toast-sm">
           <div id="postToast" className="toast m-0 w-100" role="alert" aria-live="assertive" aria-atomic="true">
             <div className="toast-body d-flex align-items-center bg-color2 text-light w-100">
-              Experience Posted
+              Post Successful
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@ class Profile extends React.Component {
                           <td>
                             <div className="text-center mt-5 text-secondary">
                               <i className="fa-solid fa-file font-30" />
-                              <div>You have not shared any experiences yet.</div>
+                              <div>You have not posted anything yet.</div>
                               <button
                                 type="button"
                                 onClick={() => {
@@ -283,7 +283,7 @@ class Profile extends React.Component {
                                 }}
                                 className="btn bg-secondary text-light my-2"
                               >
-                                Share a New Experience
+                                Share a New Post
                               </button>
                             </div>
                           </td>
