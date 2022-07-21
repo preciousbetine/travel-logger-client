@@ -5,7 +5,7 @@ You can discover other travellers and connect with them, share images from your 
 
 # Check it out
 
-[Live Link](https://logmytravel.herokuapp.com)
+[Live Link](https://posteer.herokuapp.com)
 
 ## Authors
 👤 **Precious Betine**
